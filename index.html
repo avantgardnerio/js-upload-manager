@@ -1,0 +1,64 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="scripts/UploadState.js"></script>
+    <script type="text/javascript" src="scripts/UploadManager.js"></script>
+    <script type="text/javascript" src="scripts/RingBuffer.js"></script>
+    <script type="text/javascript">
+        var exports = {};
+
+        var um = new UploadManager();
+        um.onProgress = function(state) {
+            // TODO: jQuery
+            document.getElementById("pbMain").style.width = state.getPercentText();
+            document.getElementById("tdFilename").innerHTML = state.getFilename();
+            document.getElementById("tdMimeType").innerHTML = state.getMimeType();
+            document.getElementById("tdPosition").innerHTML = state.getPosition();
+            document.getElementById("tdLength").innerHTML = state.getLength();
+            document.getElementById("tdBandwidth").innerHTML = state.getKbps();
+        };
+
+        var filesSelected = function(ev) {
+            var files = ev.target.files;
+            for(var i = 0; i < files.length; i++) {
+                var file = files[i];
+                um.upload(file); // TODO: Add multi-file support to UploadManager
+            }
+        };
+    </script>
+    <script type="text/javascript" src="scripts/base64.js"></script>
+</head>
+<body>
+    <div>
+        <input type="file" name="file" accept="image/*" capture="camera" onchange="filesSelected(event)" />
+    </div>
+
+    <!-- TODO: Use 3rd party progress bar, don't reinvent the wheel -->
+    <div style="border: 1px solid black; padding: 1px; width: 100%;">
+        <div id="pbMain" style="background-color: cornflowerblue; width: 0%; height: 20px;">
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td>Current file name:</td>
+            <td id="tdFilename"></td>
+        </tr>
+        <tr>
+            <td>Detected mime type:</td>
+            <td id="tdMimeType"></td>
+        </tr>
+        <tr>
+            <td>Confirmed bytes:</td>
+            <td id="tdPosition"></td>
+        </tr>
+        <tr>
+            <td>Total bytes:</td>
+            <td id="tdLength"></td>
+        </tr>
+        <tr>
+            <td>Kbps:</td>
+            <td id="tdBandwidth"></td>
+        </tr>
+    </table>
+</body>
+</html>
