@@ -1,13 +1,9 @@
-/*
- * Copyright (c) 2014 Brent Gardner
- * Licensed under the MIT license.
- */
 var UploadManager = function() {
     var self = {};
 
     // Constants
-    var CHUNK_SIZE = 20 * 1024;
-    var POLL_INTERVAL = 250;
+    var CHUNK_SIZE = 20 * 1024;     // Set as needed according to bandwidth & latency
+    var POLL_INTERVAL = 10;        // 250 for testing, lower for faster transfers
 
     var state = new UploadState();
 
@@ -35,6 +31,9 @@ var UploadManager = function() {
         // Read from local storage
         if(state.getData() === null) {
             return; // Nothing to upload!
+        }
+        if(state.isUploading()) {
+            return; // Already uploading a chunk, don't be reentrant
         }
 
         // Calculate next chunk

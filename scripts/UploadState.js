@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2014 Brent Gardner
- * Licensed under the MIT license.
- */
 var UploadState = function() {
     var BANDWIDTH_SAMPLE_COUNT = 10;
 
@@ -104,7 +100,7 @@ var UploadState = function() {
 
     self.setMimeType = function(value) {
         localStorage.setItem(MIME_KEY, value);
-    }
+    };
 
     // -------------------------------------------- Transient state ---------------------------------------------------
     self.startUpload = function(size) {
@@ -117,23 +113,28 @@ var UploadState = function() {
         var elapsedMs = end - startTime;
         var elapsedSec = elapsedMs / 1000;
         bytesPerSecond.add(Math.round(chunkSize / elapsedSec));
-    }
+        startTime = null;
+    };
+
+    self.isUploading = function() {
+        return startTime !== null;
+    };
 
     self.getBytesPerSecond = function() {
         return bytesPerSecond.average();
-    }
+    };
 
     self.getBitsPerSecond = function() {
         return self.getBytesPerSecond() * 8;
-    }
+    };
 
     self.getKbps = function() {
         return Math.round(self.getBitsPerSecond() / 1024);
-    }
+    };
 
     self.getMpbs = function() {
         return Math.round(self.getKbps() / 1024);
-    }
+    };
 
     return self;
-}
+};
