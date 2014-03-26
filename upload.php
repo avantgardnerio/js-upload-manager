@@ -2,7 +2,7 @@
 
 // Get the filename header
 foreach (getallheaders() as $name => $value) {
-    echo "$name: $value\n";
+    //echo "$name: $value\n";
     if($name == 'HTTP_X_FILENAME') {
         $filename = $value;
     }
@@ -21,10 +21,16 @@ $range = $ar[0];
 $ar = explode("-", $range);
 $position = (int)$ar[0];
 
+// Find a suitable filename
+$id = md5($filename);
+$filename = $id . '.' . substr(strrchr($filename,'.'), 1);
+
 // Write to file
-$fp = fopen('uploads/' . $filename, 'a'); // TODO: Security / access control
+$fp = fopen('uploads/' . $filename, 'a');
 fseek($fp, $position);
 fwrite($fp, $content);
 fclose($fp);
+
+echo $id;
 
 exit();
