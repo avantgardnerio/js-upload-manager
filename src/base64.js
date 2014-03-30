@@ -5,10 +5,14 @@
  * Copyright (c) 2012 Niklas von Hertzen
  * Licensed under the MIT license.
  */
-(function(chars){
-    "use strict";
+(function() {
+    var self = {};
 
-    exports.encode = function(arraybuffer) {
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    window.Base64 = window.Base64 || {};
+
+    Base64.encode = function(arraybuffer) {
         var bytes = new Uint8Array(arraybuffer),
             i, len = bytes.length, base64 = "";
 
@@ -28,7 +32,7 @@
         return base64;
     };
 
-    exports.decode =  function(base64) {
+    Base64.decode = function(base64) {
         var bufferLength = base64.length * 0.75,
             len = base64.length, i, p = 0,
             encoded1, encoded2, encoded3, encoded4;
@@ -56,4 +60,6 @@
 
         return arraybuffer;
     };
-})("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");
+
+    return self;
+})();

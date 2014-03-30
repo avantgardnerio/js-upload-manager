@@ -1,4 +1,4 @@
-var UploadManager = function() {
+var UploadManager = function(FileReader, XMLHttpRequest) {
     var self = {};
 
     // Upload constants
@@ -28,7 +28,7 @@ var UploadManager = function() {
         // Read the file from the disk
         var reader = new FileReader();
         reader.onload = function(ev) {
-            var b64imgData = exports.encode(ev.target.result);
+            var b64imgData = Base64.encode(ev.target.result);
             var img = new Image();
             img.onload = function() {
                 var canvas = document.createElement('canvas');
@@ -54,10 +54,11 @@ var UploadManager = function() {
                 // Grab a screenshot
                 var url = canvas.toDataURL(TARGET_FORMAT, TARGET_QUALITY);
                 b64imgData = url.substr(URL_PREFIX.length);
-                var byteArray = exports.decode(b64imgData);
+                var byteArray = Base64.decode(b64imgData);
 
                 // Upload!
-                state.setData(byteArray)
+                state.setData(byteArray);
+                uploadChunk();
             };
             img.src = URL_PREFIX + b64imgData;
         };

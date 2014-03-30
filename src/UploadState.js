@@ -27,7 +27,7 @@ var UploadState = function() {
                 return null;
             }
             try {
-                data = exports.decode(base64);
+                data = Base64.decode(base64);
             } catch(ex) {
                 data = null;
                 console.log('Error parsing data, state was corrupted: ' + ex)
@@ -38,7 +38,7 @@ var UploadState = function() {
 
     self.setData = function(value) {
         data = value;
-        var base64 = exports.encode(data);
+        var base64 = Base64.encode(data);
         localStorage.setItem(DATA_KEY, base64);
     };
 

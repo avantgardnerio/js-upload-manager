@@ -7,7 +7,7 @@
     <script type="text/javascript">
         var exports = {};
 
-        var um = new UploadManager();
+        var um = new UploadManager(FileReader, XMLHttpRequest);
         um.onProgress = function(state) {
             // TODO: jQuery
             document.getElementById("pbMain").style.width = state.getPercentText();
