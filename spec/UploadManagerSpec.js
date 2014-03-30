@@ -23,7 +23,10 @@ describe('UploadManager', function() {
         var XMLHttpRequest = function() {
             var self = {};
 
-            self.addEventListener = function(eventName, method) {
+            var listeners = {};
+
+            self.addEventListener = function(type, listener, useCapture) {
+                listeners[type] = listener;
             };
 
             self.open = function(method, url, async) {
@@ -36,6 +39,8 @@ describe('UploadManager', function() {
             };
 
             self.send = function(body) {
+                var func = listeners['load'];
+                func();
             };
 
             return self;
@@ -49,8 +54,13 @@ describe('UploadManager', function() {
     });
 
     it('should be able to upload a file', function() {
+        var isDone = false;
+        manager.onFileComplete = function() {
+            isDone = true;
+        };
         manager.upload(file);
-        expect(manager.getCurrentUpload()).toBeDefined();
+        expect(true).toBe(true); // Jasmine breaks without this - no idea why
+        expect(isDone).toBe(true);
     });
 
     var img64 = '\
