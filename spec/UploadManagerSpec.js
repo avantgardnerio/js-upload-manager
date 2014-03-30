@@ -1,3 +1,10 @@
+/*
+ * js-upload-manager
+ * https://github.com/bgard6977/js-upload-manager/
+ *
+ * Copyright (c) 2014 Brent Gardner
+ * Licensed under the MIT license.
+ */
 describe('UploadManager', function() {
     var manager;
     var file;
@@ -59,7 +66,7 @@ describe('UploadManager', function() {
             isDone = true;
         };
         manager.upload(file);
-        expect(true).toBe(true); // Jasmine breaks without this - no idea why
+        console.log('isDone=' + isDone);
         expect(isDone).toBe(true);
     });
 
