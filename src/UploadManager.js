@@ -5,8 +5,23 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
-var UploadManager = function(FileReader, XMLHttpRequest) {
+/**
+ * A resilient upload manager that keeps files in local storage until uploads can be completed
+ *
+ * @param fileReaderMock A mock FileReader, or null
+ * @param xmlHttpRequestMock A mock XMLHttpRequest, or null
+ * @param windowMock A mock timer, or null
+ * @returns {{}} The UploadManager
+ * @constructor
+ */
+var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
     var self = {};
+
+    // Mocks
+    // TODO: DI framework
+    var FileReader = fileReaderMock || FileReader;
+    var XMLHttpRequest = xmlHttpRequestMock || XMLHttpRequest;
+    var window = windowMock || window;
 
     // Upload constants
     var CHUNK_SIZE = 20 * 1024;     // Set as needed according to bandwidth & latency
@@ -43,7 +58,7 @@ var UploadManager = function(FileReader, XMLHttpRequest) {
         if(timer !== null) {
             return; // Already running
         }
-        timer = setInterval(poll, POLL_INTERVAL);
+        timer = window.setInterval(poll, POLL_INTERVAL);
     };
 
     /**
@@ -53,7 +68,7 @@ var UploadManager = function(FileReader, XMLHttpRequest) {
         if(timer === null) {
             return;
         }
-        clearInterval(timer);
+        window.clearInterval(timer);
         timer = null;
     };
 
@@ -86,6 +101,20 @@ var UploadManager = function(FileReader, XMLHttpRequest) {
     };
 
     /**
+     * @returns {number} The key of the next file to upload
+     */
+    self.minKey = function() {
+        var min = Math.pow(2, 32);
+        for(var key in localStorage) {
+            if(!isInt(key)) {
+                continue;
+            }
+            min = Math.min(min, parseInt(key));
+        }
+        return min;
+    };
+
+    /**
      * @returns {number} The key of the current upload, or 0
      */
     self.activeKey = function() {
@@ -108,13 +137,13 @@ var UploadManager = function(FileReader, XMLHttpRequest) {
      */
     self.getCurrentUpload = function() {
         // See if there are things to upload
-        var activeKey = self.activeKey();
-        if(activeKey === 0) {
+        var minKey = self.minKey();
+        if(minKey === 0) {
             return null;
         }
 
         // Grab the next thing to upload
-        var state = new UploadState(activeKey);
+        var state = new UploadState(minKey);
         if(state.getLength() === 0) {
             return null; // File data not yet loaded
         }

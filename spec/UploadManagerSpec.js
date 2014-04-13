@@ -11,7 +11,7 @@ describe('UploadManager', function() {
     var file2 = new FileMock('test2.jpg', 'image/jpeg', Resources.getImage2());
 
     beforeEach(function() {
-        manager = new UploadManager(FileReaderMock, XMLHttpRequestMock, localStorage);
+        manager = new UploadManager(FileReaderMock, XMLHttpRequestMock, new TimerMock());
         localStorage.clear();
     });
 
