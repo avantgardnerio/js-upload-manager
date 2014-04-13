@@ -50,5 +50,6 @@ TODO:
 Work Log
 --------
 * 2014-04-13
+    * Switched to maven as a build system
     * Refactored to allow for multiple files in upload queue
     * Got some high-level functional tests working
