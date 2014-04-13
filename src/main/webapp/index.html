@@ -1,0 +1,86 @@
+<!--
+/*
+ * js-upload-manager
+ * https://github.com/bgard6977/js-upload-manager/
+ *
+ * Copyright (c) 2014 Brent Gardner
+ * Licensed under the MIT license.
+ */
+-->
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="src/UploadState.js"></script>
+    <script type="text/javascript" src="src/UploadManager.js"></script>
+    <script type="text/javascript" src="src/RingBuffer.js"></script>
+    <script type="text/javascript">
+        var exports = {};
+
+        var manager = new UploadManager(FileReader, XMLHttpRequest, window);
+        manager.upload(); // Kick off any prior uploads
+
+        manager.onProgress = function(state) {
+            // TODO: jQuery
+            if(state !== null) {
+                document.getElementById("pbMain").style.width = state.getPercentText();
+                document.getElementById("tdFilename").innerHTML = state.getFilename();
+                document.getElementById("tdMimeType").innerHTML = state.getMimeType();
+                document.getElementById("tdPosition").innerHTML = state.getPosition();
+                document.getElementById("tdLength").innerHTML = state.getLength();
+            } else {
+                document.getElementById("pbMain").style.width = '0%';
+                document.getElementById("tdFilename").innerHTML = '';
+                document.getElementById("tdMimeType").innerHTML = '';
+                document.getElementById("tdPosition").innerHTML = '';
+                document.getElementById("tdLength").innerHTML = '';
+            }
+
+            // TODO: Put state tracking back in
+            //document.getElementById("tdBandwidth").innerHTML = state.getKbps();
+        };
+
+        var filesSelected = function(ev) {
+            var files = ev.target.files;
+            for(var i = 0; i < files.length; i++) {
+                var file = files[i];
+                manager.enqueue(file);
+            }
+            manager.upload();
+        };
+    </script>
+    <script type="text/javascript" src="src/base64.js"></script>
+</head>
+<body>
+    <div>
+        <input type="file" name="file" accept="image/*" capture="camera" onchange="filesSelected(event)" />
+    </div>
+
+    <!-- TODO: Use 3rd party progress bar, don't reinvent the wheel -->
+    <div style="border: 1px solid black; padding: 1px; width: 100%;">
+        <div id="pbMain" style="background-color: cornflowerblue; width: 0%; height: 20px;">
+        </div>
+    </div>
+    <table>
+        <tr>
+            <td>Current file name:</td>
+            <td id="tdFilename"></td>
+        </tr>
+        <tr>
+            <td>Detected mime type:</td>
+            <td id="tdMimeType"></td>
+        </tr>
+        <tr>
+            <td>Confirmed bytes:</td>
+            <td id="tdPosition"></td>
+        </tr>
+        <tr>
+            <td>Total bytes:</td>
+            <td id="tdLength"></td>
+        </tr>
+        <tr>
+            <td>Kbps:</td>
+            <td id="tdBandwidth"></td>
+        </tr>
+    </table>
+</body>
+</html>
