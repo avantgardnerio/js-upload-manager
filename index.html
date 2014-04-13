@@ -43,7 +43,7 @@
             var files = ev.target.files;
             for(var i = 0; i < files.length; i++) {
                 var file = files[i];
-                manager.enqueue(file); // TODO: Add multi-file support to UploadManager
+                manager.enqueue(file);
             }
             manager.upload();
         };
