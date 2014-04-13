@@ -49,6 +49,6 @@ TODO:
 
 Work Log
 --------
-2014-04-13
-    Refactored to allow for multiple files in upload queue
-    Got some high-level functional tests working
+* 2014-04-13
+    * Refactored to allow for multiple files in upload queue
+    * Got some high-level functional tests working
