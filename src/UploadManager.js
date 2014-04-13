@@ -8,9 +8,9 @@
 /**
  * A resilient upload manager that keeps files in local storage until uploads can be completed
  *
- * @param fileReaderMock A FileReader // TODO: DI framework
- * @param xmlHttpRequestMock A XMLHttpRequest // TODO: DI framework
- * @param windowMock A window object // TODO: DI framework
+ * @param FileReader A FileReader // TODO: DI framework
+ * @param XMLHttpRequest A XMLHttpRequest // TODO: DI framework
+ * @param window A window object // TODO: DI framework
  * @returns {{}} The UploadManager
  * @constructor
  */
@@ -79,6 +79,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
      */
     self.clear = function() {
         for(var key in localStorage) {
+            if(!localStorage.hasOwnProperty(key)) {
+                continue;
+            }
             if(!isInt(key)) {
                 continue;
             }
@@ -108,6 +111,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
     self.minKey = function() {
         var min = INTEGER.MAX_VALUE;
         for(var key in localStorage) {
+            if(!localStorage.hasOwnProperty(key)) {
+                continue;
+            }
             if(!isInt(key)) {
                 continue;
             }
@@ -125,6 +131,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
     self.activeKey = function() {
         var max = 0;
         for(var key in localStorage) {
+            if(!localStorage.hasOwnProperty(key)) {
+                continue;
+            }
             max = Math.max(max, parseInt(key));
         }
         return max;
@@ -172,8 +181,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
      */
     var getNextChunkSize = function(state) {
         var end = getNextEnd(state);
-        var chunkSize = end - state.getPosition();
-        return chunkSize;
+        return end - state.getPosition();
     };
 
     var completeUpload = function(state) {
@@ -191,7 +199,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
         // Get the current upload state
         var state = self.getCurrentUploadState();
         if(state === null) {
-            console.log('poll() No work found, aborting.')
+            console.log('poll() No work found, aborting.');
             self.stop();
             return; // Nothing to upload, or data still being loaded from disk
         }
@@ -199,7 +207,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
         // Grab the next chunk to upload
         var chunk = getNextChunk(state);
         if(chunk === null) {
-            console.log('poll() Upload in queue, but still waiting for data to load from disk...')
+            console.log('poll() Upload in queue, but still waiting for data to load from disk...');
             completeUpload(state);
             return;
         }
@@ -217,8 +225,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
         if(chunkSize <= 0) {
             return null;
         }
-        var abv = new Uint8Array(state.getData(), state.getPosition(), chunkSize);
-        return abv;
+        return new Uint8Array(state.getData(), state.getPosition(), chunkSize);
     };
 
     var sendNextChunk = function(state) {
@@ -266,7 +273,6 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
         req.removeEventListener('load', transferComplete);
         req.removeEventListener('error', transferFailed);
         req.removeEventListener('abort', transferCanceled);
-        delete req;
     };
 
     // -------------------------------------------- Status events -----------------------------------------------------
@@ -288,14 +294,14 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
     };
 
     var transferFailed = function(ev) {
-        console.log('transferFailed()')
+        console.log('transferFailed()');
         //var state = self.getCurrentUploadState();
         //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
     var transferCanceled = function(ev) {
-        console.log('transferCanceled()')
+        console.log('transferCanceled()');
         //var state = self.getCurrentUploadState();
         //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
