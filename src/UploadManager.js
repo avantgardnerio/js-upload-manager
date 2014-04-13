@@ -28,6 +28,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
 
     var timer = null;
     var running = false;
+    var uploading = false;
 
     /**
      * Puts a file in the upload queue
@@ -195,6 +196,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
      */
     var poll = function() {
         //console.log('poll() Polling for work...')
+        if(uploading) {
+            return; // Don't be re-entrant
+        }
 
         // Get the current upload state
         var state = self.getCurrentUploadState();
@@ -233,6 +237,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
         //console.log('sendNextChunk() sending ' + abv.length + ' bytes..')
         //state.startUpload(abv.length); // TODO: Put tracking back in
         var req = createNextRequest(state);
+        uploading = true;
         req.send(abv);
     };
 
@@ -273,6 +278,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
         req.removeEventListener('load', transferComplete);
         req.removeEventListener('error', transferFailed);
         req.removeEventListener('abort', transferCanceled);
+        uploading = false;
     };
 
     // -------------------------------------------- Status events -----------------------------------------------------
