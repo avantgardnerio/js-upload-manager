@@ -31,8 +31,9 @@
             var files = ev.target.files;
             for(var i = 0; i < files.length; i++) {
                 var file = files[i];
-                um.upload(file); // TODO: Add multi-file support to UploadManager
+                um.enqueue(file); // TODO: Add multi-file support to UploadManager
             }
+            um.upload();
         };
     </script>
     <script type="text/javascript" src="src/base64.js"></script>

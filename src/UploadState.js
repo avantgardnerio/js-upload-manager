@@ -5,48 +5,44 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
-var UploadState = function() {
-    var BANDWIDTH_SAMPLE_COUNT = 10;
-
-    var NAME_KEY = 'filename';
-    var MIME_KEY = 'mimeType';
-    var POSITION_KEY = 'position';
-    var DATA_KEY = 'data';
-
+var UploadState = function(key) {
     var self = {};
 
     var data = null;
-    var chunkSize = null;
-    var startTime = null;
-    var bytesPerSecond = new RingBuffer(BANDWIDTH_SAMPLE_COUNT);
 
-    self.clear = function() {
+    // Load
+    var state = {
+        'filename': null,
+        'mimeType': 'application/octet-stream',
+        'position': 0,
+        'data': null
+    };
+
+    self.load = function() {
+        var json = localStorage.getItem(key);
+        state = JSON.parse(json);
+        data = Base64.decode(state.data);
+    };
+
+    self.save = function() {
+        var json = JSON.stringify(state);
+        localStorage.setItem(key, json);
+    };
+
+    self.free = function() {
         data = null;
-        localStorage.clear();
+        localStorage.removeItem(key);
     };
 
     // ---------------------------------------------------- Data ------------------------------------------------------
 
-    self.getData = function() {
-        if(data === null) {
-            var base64 = localStorage.getItem(DATA_KEY);
-            if(!base64) {
-                return null;
-            }
-            try {
-                data = Base64.decode(base64);
-            } catch(ex) {
-                data = null;
-                console.log('Error parsing data, state was corrupted: ' + ex)
-            }
-        }
-        return data;
-    };
-
     self.setData = function(value) {
         data = value;
-        var base64 = Base64.encode(data);
-        localStorage.setItem(DATA_KEY, base64);
+        state.data = Base64.encode(data);
+    };
+
+    self.getData = function() {
+        return data;
     };
 
     self.getLength = function() {
@@ -55,6 +51,31 @@ var UploadState = function() {
             return 0;
         }
         return data.byteLength;
+    };
+
+    // ------------------------------------------- Persistent state ---------------------------------------------------
+    self.setPosition = function(value) {
+        state.position = parseInt(value);
+    };
+
+    self.getPosition = function() {
+        return state.position;
+    };
+
+    self.setFilename = function(value) {
+        state.filename = value;
+    };
+
+    self.getFilename = function() {
+        return state.filename;
+    };
+
+    self.setMimeType = function(value) {
+        state.mimeType = value;
+    };
+
+    self.getMimeType = function() {
+        return state.mimeType;
     };
 
     // ----------------------------------------------- Calculations ---------------------------------------------------
@@ -72,75 +93,6 @@ var UploadState = function() {
 
     self.getPercentText = function() {
         return self.getPercent() + "%";
-    };
-
-    // ------------------------------------------- Persistent state ---------------------------------------------------
-    self.getPosition = function() {
-        var value = localStorage.getItem(POSITION_KEY);
-        if(!value) {
-            return 0;
-        }
-        return parseInt(value);
-    };
-
-    self.setPosition = function(value) {
-        localStorage.setItem(POSITION_KEY, value);
-    };
-
-
-    self.getFilename = function() {
-        return localStorage.getItem(NAME_KEY);
-    };
-
-    self.setFilename = function(value) {
-        localStorage.setItem(NAME_KEY, value);
-    };
-
-
-    self.getMimeType = function() {
-        var value = localStorage.getItem(MIME_KEY);
-        if ( !value || value == '' ) {
-            return 'application/octet-stream';
-        }
-        return value;
-    };
-
-    self.setMimeType = function(value) {
-        localStorage.setItem(MIME_KEY, value);
-    };
-
-    // -------------------------------------------- Transient state ---------------------------------------------------
-    self.startUpload = function(size) {
-        chunkSize = size;
-        startTime = new Date().getTime();
-    };
-
-    self.endUpload = function() {
-        var end = new Date().getTime();
-        var elapsedMs = end - startTime;
-        var elapsedSec = elapsedMs / 1000;
-        bytesPerSecond.add(Math.round(chunkSize / elapsedSec));
-        startTime = null;
-    };
-
-    self.isUploading = function() {
-        return startTime !== null;
-    };
-
-    self.getBytesPerSecond = function() {
-        return bytesPerSecond.average();
-    };
-
-    self.getBitsPerSecond = function() {
-        return self.getBytesPerSecond() * 8;
-    };
-
-    self.getKbps = function() {
-        return Math.round(self.getBitsPerSecond() / 1024);
-    };
-
-    self.getMpbs = function() {
-        return Math.round(self.getKbps() / 1024);
     };
 
     return self;

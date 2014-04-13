@@ -18,7 +18,7 @@ var UploadManager = function(FileReader, XMLHttpRequest) {
      *
      * @param file The file to upload
      */
-    self.upload = function(file) {
+    self.enqueue = function(file) {
         // Save meta data
         state.setFilename(file.name);
         state.setMimeType(file.type);
