@@ -21,10 +21,17 @@ var TimerMock = function(timeout) {
         return {};
     };
 
+    /**
+     * Stops the current timer
+     * @param token Ignored parameter for compatibility with the standard API
+     */
     self.clearInterval = function(token) {
         running = false;
     };
 
+    /**
+     * @returns {number} The current time in millis
+     */
     var now = function() {
         return new Date().getTime();
     };

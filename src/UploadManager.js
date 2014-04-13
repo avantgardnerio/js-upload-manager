@@ -27,6 +27,11 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
     var CHUNK_SIZE = 20 * 1024;     // Set as needed according to bandwidth & latency
     var POLL_INTERVAL = 10;         // Set as needed according to bandwidth & latency
     var POST_URL = 'upload.php';
+
+    var INTEGER = {
+        'MAX_VALUE': Math.pow(2, 32)
+    };
+
     var timer = null;
 
     /**
@@ -104,12 +109,15 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
      * @returns {number} The key of the next file to upload
      */
     self.minKey = function() {
-        var min = Math.pow(2, 32);
+        var min = INTEGER.MAX_VALUE;
         for(var key in localStorage) {
             if(!isInt(key)) {
                 continue;
             }
             min = Math.min(min, parseInt(key));
+        }
+        if(min === INTEGER.MAX_VALUE) {
+            return 0;
         }
         return min;
     };
@@ -135,7 +143,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
     /**
      * @returns {UploadState|null} The current thing to upload, or null
      */
-    self.getCurrentUpload = function() {
+    self.getCurrentUploadState = function() {
         // See if there are things to upload
         var minKey = self.minKey();
         if(minKey === 0) {
@@ -144,6 +152,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
 
         // Grab the next thing to upload
         var state = new UploadState(minKey);
+        state.load();
         if(state.getLength() === 0) {
             return null; // File data not yet loaded
         }
@@ -181,13 +190,13 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
      */
     var poll = function() {
         // Get the current upload state
-        var state = self.getCurrentUpload();
+        var state = self.getCurrentUploadState();
         if(state === null) {
             return; // Nothing to upload, or data still being loaded from disk
         }
 
         // Grab the next chunk to upload
-        var chunk = getNextChunkSize(state);
+        var chunk = getNextChunk(state);
         if(chunk === null) {
             completeUpload(state);
             return;
@@ -212,7 +221,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
 
     var sendNextChunk = function(state) {
         var abv = getNextChunk(state);
-        state.startUpload(abv.size);
+        //state.startUpload(abv.length); // TODO: Put tracking back in
         var req = createNextRequest(state);
         req.send(abv);
     };
@@ -262,29 +271,28 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
     };
 
     var transferComplete = function(ev) {
-        var state = self.getCurrentUpload();
-        state.endUpload();
+        var state = self.getCurrentUploadState();
+        //state.endUpload(); // TODO: Put tracking back in
         updateStatus();
         state.setPosition(state.getPosition() + CHUNK_SIZE);
         freeRequest(ev);
     };
 
     var transferFailed = function(ev) {
-        var state = self.getCurrentUpload();
-        state.endUpload();
+        var state = self.getCurrentUploadState();
+        //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
     var transferCanceled = function(ev) {
-        var state = self.getCurrentUpload();
-        state.endUpload();
+        var state = self.getCurrentUploadState();
+        //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
     var updateStatus = function() {
-        var state = self.getCurrentUpload();
+        var state = self.getCurrentUploadState();
         self.onProgress(state);
-        freeRequest(ev);
     };
 
     return self;
