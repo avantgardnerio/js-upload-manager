@@ -15,16 +15,15 @@ var RingBuffer = function(size) {
         ar[position] = item;
         position = (position + 1) % size;
         console.log("position=" + position + " size=" + ar.length);
-    }
+    };
 
     self.average = function() {
         var count = 0;
         for(var i = 0; i < ar.length; i++) {
-            var item = ar[i];
-            count += item;
+            count += ar[i];
         }
         return Math.round(count / ar.length);
-    }
+    };
 
     return self;
-}
+};

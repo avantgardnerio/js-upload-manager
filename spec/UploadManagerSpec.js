@@ -23,7 +23,7 @@ describe('UploadManager', function() {
         expect(manager.nextKey()).toEqual(1);
 
         localStorage.clear();
-        localStorage.setItem(1, 'test1');
+        localStorage.setItem('1', 'test1');
         expect(manager.nextKey()).toEqual(2);
     });
 

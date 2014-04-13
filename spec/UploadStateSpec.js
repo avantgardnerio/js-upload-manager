@@ -11,7 +11,7 @@ describe('UploadState', function() {
 
     var FILE_1 = Resources.getImage1();
     var FILE_1_SIZE = 264273;
-    var KEY = 1;
+    var KEY = '1';
 
     beforeEach(function() {
     });
