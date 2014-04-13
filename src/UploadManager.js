@@ -33,6 +33,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
     };
 
     var timer = null;
+    var running = false;
 
     /**
      * Puts a file in the upload queue
@@ -63,6 +64,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
         if(timer !== null) {
             return; // Already running
         }
+        running = true;
         timer = window.setInterval(poll, POLL_INTERVAL);
     };
 
@@ -70,11 +72,12 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
      * Stops any uploads in progress
      */
     self.stop = function() {
-        if(timer === null) {
+        if(running === false) {
             return;
         }
         window.clearInterval(timer);
         timer = null;
+        running = false;
     };
 
     /**
@@ -92,7 +95,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
     /**
      * Event listener for progress
      */
-    self.onProgress = function() {
+    self.onProgress = function(state) {
     };
 
     /**
@@ -189,15 +192,20 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
      * Called periodically to check for work, and advance if possible
      */
     var poll = function() {
+        //console.log('poll() Polling for work...')
+
         // Get the current upload state
         var state = self.getCurrentUploadState();
         if(state === null) {
+            console.log('poll() No work found, aborting.')
+            self.stop();
             return; // Nothing to upload, or data still being loaded from disk
         }
 
         // Grab the next chunk to upload
         var chunk = getNextChunk(state);
         if(chunk === null) {
+            console.log('poll() Upload in queue, but still waiting for data to load from disk...')
             completeUpload(state);
             return;
         }
@@ -221,6 +229,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
 
     var sendNextChunk = function(state) {
         var abv = getNextChunk(state);
+        //console.log('sendNextChunk() sending ' + abv.length + ' bytes..')
         //state.startUpload(abv.length); // TODO: Put tracking back in
         var req = createNextRequest(state);
         req.send(abv);
@@ -249,6 +258,7 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
         req.open('POST', POST_URL, true);
 
         var contentRange = buildContentRange(state);
+        console.log('createNextRequest() ' + state.getFilename() + ' ' + contentRange);
         req.setRequestHeader('HTTP_X_FILENAME', state.getFilename());
         req.setRequestHeader('Content-Range', contentRange);
         req.overrideMimeType(state.getMimeType());
@@ -271,21 +281,26 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
     };
 
     var transferComplete = function(ev) {
+        //console.log('transferComplete()')
+
         var state = self.getCurrentUploadState();
         //state.endUpload(); // TODO: Put tracking back in
         updateStatus();
         state.setPosition(state.getPosition() + CHUNK_SIZE);
+        state.save();
         freeRequest(ev);
     };
 
     var transferFailed = function(ev) {
-        var state = self.getCurrentUploadState();
+        console.log('transferFailed()')
+        //var state = self.getCurrentUploadState();
         //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
     var transferCanceled = function(ev) {
-        var state = self.getCurrentUploadState();
+        console.log('transferCanceled()')
+        //var state = self.getCurrentUploadState();
         //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
