@@ -7,61 +7,11 @@
  */
 describe('UploadManager', function() {
     var manager;
-    var file1;
-    var file2;
+    var file1 = new FileMock('test1.jpg', 'image/jpeg', Resources.getImage1());
+    var file2 = new FileMock('test2.jpg', 'image/jpeg', Resources.getImage2());
 
     beforeEach(function() {
-
-        // Mock FileReader
-        var FileReader = function() {
-            var self = {};
-            var ar = Base64.decode(img64);
-            self.readAsArrayBuffer = function() {
-                var ev = {
-                    'target': {
-                        'result': ar
-                    }
-                };
-                self.onload(ev);
-            };
-            return self;
-        };
-
-        // Mock XMLHttpRequest
-        var XMLHttpRequest = function() {
-            var self = {};
-
-            var listeners = {};
-
-            self.addEventListener = function(type, listener, useCapture) {
-                listeners[type] = listener;
-            };
-
-            self.open = function(method, url, async) {
-            };
-
-            self.setRequestHeader = function(key, value) {
-            };
-
-            self.overrideMimeType = function(mimeType) {
-            };
-
-            self.send = function(body) {
-                var func = listeners['load'];
-                func();
-            };
-
-            return self;
-        };
-
-        manager = new UploadManager(FileReader, XMLHttpRequest, localStorage);
-
-        // Mock files
-        file1 = {
-        };
-        file2 = {
-        };
-
+        manager = new UploadManager(FileReaderMock, XMLHttpRequestMock, localStorage);
         localStorage.clear();
     });
 
