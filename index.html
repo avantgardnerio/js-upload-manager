@@ -16,24 +16,36 @@
     <script type="text/javascript">
         var exports = {};
 
-        var um = new UploadManager(FileReader, XMLHttpRequest, window);
-        um.onProgress = function(state) {
+        var manager = new UploadManager(FileReader, XMLHttpRequest, window);
+        manager.upload(); // Kick off any prior uploads
+
+        manager.onProgress = function(state) {
             // TODO: jQuery
-            document.getElementById("pbMain").style.width = state.getPercentText();
-            document.getElementById("tdFilename").innerHTML = state.getFilename();
-            document.getElementById("tdMimeType").innerHTML = state.getMimeType();
-            document.getElementById("tdPosition").innerHTML = state.getPosition();
-            document.getElementById("tdLength").innerHTML = state.getLength();
-            document.getElementById("tdBandwidth").innerHTML = state.getKbps();
+            if(state !== null) {
+                document.getElementById("pbMain").style.width = state.getPercentText();
+                document.getElementById("tdFilename").innerHTML = state.getFilename();
+                document.getElementById("tdMimeType").innerHTML = state.getMimeType();
+                document.getElementById("tdPosition").innerHTML = state.getPosition();
+                document.getElementById("tdLength").innerHTML = state.getLength();
+            } else {
+                document.getElementById("pbMain").style.width = '0%';
+                document.getElementById("tdFilename").innerHTML = '';
+                document.getElementById("tdMimeType").innerHTML = '';
+                document.getElementById("tdPosition").innerHTML = '';
+                document.getElementById("tdLength").innerHTML = '';
+            }
+
+            // TODO: Put state tracking back in
+            //document.getElementById("tdBandwidth").innerHTML = state.getKbps();
         };
 
         var filesSelected = function(ev) {
             var files = ev.target.files;
             for(var i = 0; i < files.length; i++) {
                 var file = files[i];
-                um.enqueue(file); // TODO: Add multi-file support to UploadManager
+                manager.enqueue(file); // TODO: Add multi-file support to UploadManager
             }
-            um.upload();
+            manager.upload();
         };
     </script>
     <script type="text/javascript" src="src/base64.js"></script>

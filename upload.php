@@ -26,7 +26,7 @@ $id = md5($filename);
 $filename = $id . '.' . substr(strrchr($filename,'.'), 1);
 
 // Write to file
-$fp = fopen('uploads/' . $filename, 'a');
+$fp = fopen('uploads/' . $filename, 'c');
 fseek($fp, $position);
 fwrite($fp, $content);
 fclose($fp);
