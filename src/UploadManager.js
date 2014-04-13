@@ -8,20 +8,14 @@
 /**
  * A resilient upload manager that keeps files in local storage until uploads can be completed
  *
- * @param fileReaderMock A mock FileReader, or null
- * @param xmlHttpRequestMock A mock XMLHttpRequest, or null
- * @param windowMock A mock timer, or null
+ * @param fileReaderMock A FileReader // TODO: DI framework
+ * @param xmlHttpRequestMock A XMLHttpRequest // TODO: DI framework
+ * @param windowMock A window object // TODO: DI framework
  * @returns {{}} The UploadManager
  * @constructor
  */
-var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
+var UploadManager = function(FileReader, XMLHttpRequest, window) {
     var self = {};
-
-    // Mocks
-    // TODO: DI framework
-    var FileReader = fileReaderMock || FileReader;
-    var XMLHttpRequest = xmlHttpRequestMock || XMLHttpRequest;
-    var window = windowMock || window;
 
     // Upload constants
     var CHUNK_SIZE = 20 * 1024;     // Set as needed according to bandwidth & latency
@@ -286,8 +280,10 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
         var state = self.getCurrentUploadState();
         //state.endUpload(); // TODO: Put tracking back in
         updateStatus();
-        state.setPosition(state.getPosition() + CHUNK_SIZE);
-        state.save();
+        if(state !== null) {
+            state.setPosition(state.getPosition() + CHUNK_SIZE);
+            state.save();
+        }
         freeRequest(ev);
     };
 
@@ -307,7 +303,11 @@ var UploadManager = function(fileReaderMock, xmlHttpRequestMock, windowMock) {
 
     var updateStatus = function() {
         var state = self.getCurrentUploadState();
-        self.onProgress(state);
+        try {
+            self.onProgress(state);
+        } catch (ex) {
+            console.log(ex);
+        }
     };
 
     return self;
