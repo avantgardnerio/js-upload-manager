@@ -7,7 +7,8 @@
  */
 describe('UploadManager', function() {
     var manager;
-    var file;
+    var file1;
+    var file2;
 
     beforeEach(function() {
 
@@ -53,19 +54,38 @@ describe('UploadManager', function() {
             return self;
         };
 
-        manager = new UploadManager(FileReader, XMLHttpRequest);
+        manager = new UploadManager(FileReader, XMLHttpRequest, localStorage);
 
-        // Mock file
-        file = {
+        // Mock files
+        file1 = {
         };
+        file2 = {
+        };
+
+        localStorage.clear();
     });
 
-    it('should be able to upload a file', function() {
+    afterEach(function() {
+        localStorage.clear();
+    });
+
+    it('should be able to find the next key in local storage', function() {
+        expect(manager.nextKey()).toEqual(1);
+
+        localStorage.clear();
+        localStorage.setItem(1, 'test1');
+        expect(manager.nextKey()).toEqual(2);
+    });
+
+    it('should be able to upload files', function() {
         var isDone = false;
         manager.onFileComplete = function() {
             isDone = true;
         };
-        manager.enqueue(file);
+
+        manager.enqueue(file1);
+        manager.enqueue(file2);
+
         manager.upload();
         expect(isDone).toBe(true);
     });
