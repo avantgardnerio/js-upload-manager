@@ -29,11 +29,8 @@ TODO:
     * Play better with other libraries
     * Don't stomp on other things that might be in local storage
 * Prompting the user to increase local storage space if files are too large
-* Grunt build
-    * Tired of hitting "refresh" in Jasmine
 * Stop repeatedly reloading from localStorage
     * Should cache things in memory to avoid continually base64 decoding
-* Test coverage report
 * More refactoring
     * FIFO functionality should be extracted out into LocalStorageQueue.js
 * Hook up support for filters
@@ -50,6 +47,7 @@ TODO:
 Work Log
 --------
 * 2014-04-13
+    * Test coverage report
     * Switched to maven as a build system
     * Refactored to allow for multiple files in upload queue
     * Got some high-level functional tests working
