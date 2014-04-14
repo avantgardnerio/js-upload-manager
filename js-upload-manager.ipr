@@ -2,14 +2,20 @@
 <project version="4">
   <component name="ArtifactManager">
     <artifact type="exploded-war" name="js-upload-manager:war exploded">
-      <output-path>$PROJECT_DIR$/out/artifacts/js_upload_manager_war_exploded</output-path>
+      <output-path>$PROJECT_DIR$/target/js-upload-manager</output-path>
       <root id="root">
+        <element id="javaee-facet-resources" facet="js-upload-manager/web/Web" />
         <element id="directory" name="WEB-INF">
           <element id="directory" name="classes">
             <element id="module-output" name="js-upload-manager" />
           </element>
         </element>
-        <element id="javaee-facet-resources" facet="js-upload-manager/web/Web" />
+      </root>
+    </artifact>
+    <artifact type="war" name="js-upload-manager:war">
+      <output-path>$PROJECT_DIR$/target</output-path>
+      <root id="archive" name="js-upload-manager.war">
+        <element id="artifact" artifact-name="js-upload-manager:war exploded" />
       </root>
     </artifact>
   </component>
@@ -43,6 +49,9 @@
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
