@@ -80,13 +80,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
      */
     self.clear = function() {
         for(var key in localStorage) {
-            if(!localStorage.hasOwnProperty(key)) {
-                continue;
+            if(isInt(key)) {
+                localStorage.removeItem(key);
             }
-            if(!isInt(key)) {
-                continue;
-            }
-            localStorage.removeItem(key);
         }
     };
 
@@ -112,9 +108,6 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
     self.minKey = function() {
         var min = INTEGER.MAX_VALUE;
         for(var key in localStorage) {
-            if(!localStorage.hasOwnProperty(key)) {
-                continue;
-            }
             if(!isInt(key)) {
                 continue;
             }
@@ -132,9 +125,6 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
     self.activeKey = function() {
         var max = 0;
         for(var key in localStorage) {
-            if(!localStorage.hasOwnProperty(key)) {
-                continue;
-            }
             max = Math.max(max, parseInt(key));
         }
         return max;

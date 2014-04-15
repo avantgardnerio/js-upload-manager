@@ -66,9 +66,6 @@
                     <backgroundJavaScriptTimeout>10000</backgroundJavaScriptTimeout>
                     <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
                     <outputDir>${project.build.directory}/coverage</outputDir>
-                    <includes>
-                        SpecRunner.html
-                    </includes>
                     <noInstrumentPatterns>
                         <pattern>.*/spec/.*</pattern>
                         <!-- Don't instrument specs -->
