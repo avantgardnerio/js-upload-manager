@@ -52,6 +52,7 @@ var XMLHttpRequestMock = function() {
         var ev = {
             'target': self
         };
+        self.status = 200;
         for(var i = 0; i < ar.length; i++) {
             var func = ar[i];
             func(ev);
