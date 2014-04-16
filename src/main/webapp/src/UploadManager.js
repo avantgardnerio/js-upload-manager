@@ -23,6 +23,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     var ERROR_INTERVAL = 3000;      // Don't DoS the server if we start encountering errors
     var POST_URL = 'um/uploads';
     var METHOD = 'PUT';
+    var CONTENT_RANGE = 'Content-Range';
 
     // TODO: Move to utility class
     var INTEGER = {
@@ -297,7 +298,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
         req.open(METHOD, url, true);
 
         var contentRange = buildContentRange(state);
-        req.setRequestHeader('Content-Range', contentRange);
+        req.setRequestHeader(CONTENT_RANGE, contentRange);
         req.overrideMimeType(state.getMimeType());
 
         console.log('createNextRequest() ' + state.getFilename() + ' ' + contentRange);
