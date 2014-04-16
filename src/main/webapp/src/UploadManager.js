@@ -36,7 +36,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
      */
     self.enqueue = function(file) {
         // Save meta data
-        var state = new UploadState(self.nextKey(), localStorage);
+        var state = new UploadState(nextKey(), localStorage);
         state.setFilename(file.name);
         state.setMimeType(file.type);
         state.setPosition(0);
@@ -111,7 +111,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     /**
      * @returns {number} The key of the next file to upload
      */
-    self.minKey = function() {
+    var minKey = function() {
         var min = INTEGER.MAX_VALUE;
         for(var key in localStorage) {
             if(!localStorage.hasOwnProperty(key)) {
@@ -131,7 +131,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     /**
      * @returns {number} The key of the current upload, or 0
      */
-    self.activeKey = function() {
+    var activeKey = function() {
         var max = 0;
         for(var key in localStorage) {
             if(!localStorage.hasOwnProperty(key)) {
@@ -145,22 +145,22 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     /**
      * @returns {number} The key where the next upload should be stored
      */
-    self.nextKey = function() {
-        return self.activeKey() + 1;
+    var nextKey = function() {
+        return activeKey() + 1;
     };
 
     /**
      * @returns {UploadState|null} The current thing to upload, or null
      */
-    self.getCurrentUploadState = function() {
+    var getCurrentUploadState = function() {
         // See if there are things to upload
-        var minKey = self.minKey();
-        if(minKey === 0) {
+        var mk = minKey();
+        if(mk === 0) {
             return null;
         }
 
         // Grab the next thing to upload
-        var state = new UploadState(minKey, localStorage);
+        var state = new UploadState(mk, localStorage);
         state.load();
         if(state.getLength() === 0) {
             return null; // File data not yet loaded
@@ -203,7 +203,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
         }
 
         // Get the current upload state
-        var state = self.getCurrentUploadState();
+        var state = getCurrentUploadState();
         if(state === null) {
             console.log('poll() No work found, aborting.');
             self.stop();
@@ -291,7 +291,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     var transferComplete = function(ev) {
         //console.log('transferComplete()')
 
-        var state = self.getCurrentUploadState();
+        var state = getCurrentUploadState();
         //state.endUpload(); // TODO: Put tracking back in
         updateStatus();
         if(state !== null) {
@@ -303,20 +303,20 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
 
     var transferFailed = function(ev) {
         console.log('transferFailed()');
-        //var state = self.getCurrentUploadState();
+        //var state = getCurrentUploadState();
         //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
     var transferCanceled = function(ev) {
         console.log('transferCanceled()');
-        //var state = self.getCurrentUploadState();
+        //var state = getCurrentUploadState();
         //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
     var updateStatus = function() {
-        var state = self.getCurrentUploadState();
+        var state = getCurrentUploadState();
         try {
             self.onProgress(state);
         } catch (ex) {

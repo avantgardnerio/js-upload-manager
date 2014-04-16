@@ -20,16 +20,6 @@ describe('UploadManager', function() {
         localStorage.clear();
     });
 
-    it('should be able to find the next key in local storage', function() {
-        expect(manager.nextKey()).toEqual(1);
-
-        localStorage.setItem('1', 'test1');
-        expect(manager.nextKey()).toEqual(2);
-
-        localStorage.setItem('2', 'test1');
-        expect(manager.nextKey()).toEqual(3);
-    });
-
     it('should be able to upload files', function() {
         var isDone = false;
         manager.onFileComplete = function() {
