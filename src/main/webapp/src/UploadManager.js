@@ -8,13 +8,13 @@
 /**
  * A resilient upload manager that keeps files in local storage until uploads can be completed
  *
- * @param FileReader A FileReader // TODO: DI framework
- * @param XMLHttpRequest A XMLHttpRequest // TODO: DI framework
- * @param window A window object // TODO: DI framework
+ * @param FileReader A FileReader
+ * @param XMLHttpRequest A XMLHttpRequest
+ * @param window A window object
  * @returns {{}} The UploadManager
  * @constructor
  */
-var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
+var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) { // TODO: DI framework
     var self = {};
 
     // Upload constants
@@ -80,6 +80,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
      */
     self.clear = function() {
         for(var key in localStorage) {
+            if(!localStorage.hasOwnProperty(key)) {
+                continue;
+            }
             if(isInt(key)) {
                 localStorage.removeItem(key);
             }
@@ -99,7 +102,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     };
 
     var isInt = function(value) {
-        if(value === NaN) {
+        if(isNaN(value)) {
             return false;
         }
         return value == parseInt(value);
@@ -111,6 +114,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     self.minKey = function() {
         var min = INTEGER.MAX_VALUE;
         for(var key in localStorage) {
+            if(!localStorage.hasOwnProperty(key)) {
+                continue;
+            }
             if(!isInt(key)) {
                 continue;
             }
@@ -191,7 +197,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
      * Called periodically to check for work, and advance if possible
      */
     var poll = function() {
-        console.log('poll() Polling for work...')
+        //console.log('poll() Polling for work...');
         if(uploading) {
             return; // Don't be re-entrant
         }
@@ -230,7 +236,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
 
     var sendNextChunk = function(state) {
         var abv = getNextChunk(state);
-        console.log('sendNextChunk() sending ' + abv.length + ' bytes..')
+        //console.log('sendNextChunk() sending ' + abv.length + ' bytes..');
         //state.startUpload(abv.length); // TODO: Put tracking back in
         var req = createNextRequest(state);
         uploading = true;
