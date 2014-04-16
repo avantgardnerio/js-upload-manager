@@ -81,6 +81,5 @@ public class UploadServlet extends HttpServlet {
         } finally {
             tmp.delete();
         }
-        log.debug("test");
     }
 }

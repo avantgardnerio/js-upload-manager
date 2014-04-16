@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{80223F42-1E61-411C-8D71-B0ECB961A72F}</ProjectGuid>
+    <ProjectTypeGuids>{349C5851-65DF-11DA-9384-00065B846F21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>jsuploadmanager</RootNamespace>
+    <AssemblyName>js-upload-manager</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="web.config" />
+    <Content Include="index.html" />
+    <Content Include="SpecRunner.html" />
+    <Content Include="lib\jasmine-2.0.0\boot.js" />
+    <Content Include="lib\jasmine-2.0.0\console.js" />
+    <Content Include="lib\jasmine-2.0.0\jasmine.css" />
+    <Content Include="lib\jasmine-2.0.0\jasmine.js" />
+    <Content Include="lib\jasmine-2.0.0\jasmine_favicon.png" />
+    <Content Include="lib\jasmine-2.0.0\jasmine-html.js" />
+    <Content Include="spec\CanvasMock.js" />
+    <Content Include="spec\FileMock.js" />
+    <Content Include="spec\FileReaderMock.js" />
+    <Content Include="spec\ImageMock.js" />
+    <Content Include="spec\LocalStorageMock.js" />
+    <Content Include="spec\ResizeFilterSpec.js" />
+    <Content Include="spec\Resources.js" />
+    <Content Include="spec\TimerMock.js" />
+    <Content Include="spec\UploadManagerSpec.js" />
+    <Content Include="spec\UploadStateSpec.js" />
+    <Content Include="spec\XMLHttpRequestMock.js" />
+    <Content Include="src\BandwidthTracker.js" />
+    <Content Include="src\base64.js" />
+    <Content Include="src\DefaultFilter.js" />
+    <Content Include="src\ResizeFilter.js" />
+    <Content Include="src\RingBuffer.js" />
+    <Content Include="src\UploadManager.js" />
+    <Content Include="src\UploadState.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Upload.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties VerifyCodeBehindFields="true" VerifyCodeBehindEvents="true">
+        <XspParameters Port="8083" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="true" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>

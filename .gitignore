@@ -29,4 +29,9 @@ uploads
 
 # IDE files
 *.iws
+*.userprefs
+
+# Output
+*.dll
+*.mdb
 
