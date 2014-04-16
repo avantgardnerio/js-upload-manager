@@ -16,7 +16,7 @@
     <script type="text/javascript">
         var exports = {};
 
-        var manager = new UploadManager(FileReader, XMLHttpRequest, window);
+        var manager = new UploadManager(FileReader, XMLHttpRequest, window, localStorage);
         manager.upload(); // Kick off any prior uploads
 
         manager.onProgress = function(state) {

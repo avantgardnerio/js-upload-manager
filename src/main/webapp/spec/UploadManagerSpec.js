@@ -9,9 +9,10 @@ describe('UploadManager', function() {
     var manager;
     var file1 = new FileMock('test1.jpg', 'image/jpeg', Resources.getImage1());
     var file2 = new FileMock('test2.jpg', 'image/jpeg', Resources.getImage2());
+    var localStorage = new LocalStorageMock();
 
     beforeEach(function() {
-        manager = new UploadManager(FileReaderMock, XMLHttpRequestMock, new TimerMock());
+        manager = new UploadManager(FileReaderMock, XMLHttpRequestMock, new TimerMock(), localStorage);
         localStorage.clear();
     });
 

@@ -14,7 +14,7 @@
  * @returns {{}} The UploadManager
  * @constructor
  */
-var UploadManager = function(FileReader, XMLHttpRequest, window) {
+var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     var self = {};
 
     // Upload constants
@@ -36,7 +36,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
      */
     self.enqueue = function(file) {
         // Save meta data
-        var state = new UploadState(self.nextKey());
+        var state = new UploadState(self.nextKey(), localStorage);
         state.setFilename(file.name);
         state.setMimeType(file.type);
         state.setPosition(0);
@@ -125,6 +125,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
     self.activeKey = function() {
         var max = 0;
         for(var key in localStorage) {
+            if(!localStorage.hasOwnProperty(key)) {
+                continue;
+            }
             max = Math.max(max, parseInt(key));
         }
         return max;
@@ -148,7 +151,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
         }
 
         // Grab the next thing to upload
-        var state = new UploadState(minKey);
+        var state = new UploadState(minKey, localStorage);
         state.load();
         if(state.getLength() === 0) {
             return null; // File data not yet loaded
@@ -185,7 +188,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
      * Called periodically to check for work, and advance if possible
      */
     var poll = function() {
-        //console.log('poll() Polling for work...')
+        console.log('poll() Polling for work...')
         if(uploading) {
             return; // Don't be re-entrant
         }
@@ -224,7 +227,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window) {
 
     var sendNextChunk = function(state) {
         var abv = getNextChunk(state);
-        //console.log('sendNextChunk() sending ' + abv.length + ' bytes..')
+        console.log('sendNextChunk() sending ' + abv.length + ' bytes..')
         //state.startUpload(abv.length); // TODO: Put tracking back in
         var req = createNextRequest(state);
         uploading = true;

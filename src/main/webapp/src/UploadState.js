@@ -5,7 +5,7 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
-var UploadState = function(key) {
+var UploadState = function(key, localStorage) {
     var self = {};
 
     var data = null;
