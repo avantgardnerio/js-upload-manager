@@ -21,7 +21,7 @@
         var exports = {};
 
         var manager = new UploadManager(FileReader, XMLHttpRequest, window, localStorage);
-        manager.addFilter(new ResizeFilter());
+        manager.addFilter(new ResizeFilter(Image, document));
         manager.upload(); // Kick off any prior uploads
 
         manager.onProgress = function(state) {

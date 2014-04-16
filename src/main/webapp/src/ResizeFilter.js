@@ -5,7 +5,7 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
-var ResizeFilter = function() {
+var ResizeFilter = function(Image, document) {
     var self = {};
 
     // Graphics constants
