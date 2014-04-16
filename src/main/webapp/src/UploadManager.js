@@ -99,6 +99,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     };
 
     var isInt = function(value) {
+        if(value === NaN) {
+            return false;
+        }
         return value == parseInt(value);
     };
 
