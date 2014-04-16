@@ -14,7 +14,7 @@ var RingBuffer = function(size) {
     self.add = function(item) {
         ar[position] = item;
         position = (position + 1) % size;
-        console.log("position=" + position + " size=" + ar.length);
+        //console.log("position=" + position + " size=" + ar.length);
     };
 
     self.average = function() {

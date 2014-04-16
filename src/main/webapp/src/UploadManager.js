@@ -20,7 +20,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     // Upload constants
     var CHUNK_SIZE = 20 * 1024;     // Set as needed according to bandwidth & latency
     var POLL_INTERVAL = 10;         // Set as needed according to bandwidth & latency
-    var POST_URL = 'upload.php';
+    var ERROR_INTERVAL = 3000;      // Don't DoS the server if we start encountering errors
+    var POST_URL = 'um/uploads';
+    var METHOD = 'PUT';
 
     // TODO: Move to utility class
     var INTEGER = {
@@ -285,18 +287,20 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
 
     var createNextRequest = function(state) {
 
+        var url = POST_URL + '/' + state.getFilename();
+
         var req = new XMLHttpRequest();
         req.addEventListener('progress', updateProgress, false);
         req.addEventListener('load', transferComplete, false);
         req.addEventListener('error', transferFailed, false);
         req.addEventListener('abort', transferCanceled, false);
-        req.open('POST', POST_URL, true);
+        req.open(METHOD, url, true);
 
         var contentRange = buildContentRange(state);
-        console.log('createNextRequest() ' + state.getFilename() + ' ' + contentRange);
-        req.setRequestHeader('HTTP_X_FILENAME', state.getFilename());
         req.setRequestHeader('Content-Range', contentRange);
         req.overrideMimeType(state.getMimeType());
+
+        console.log('createNextRequest() ' + state.getFilename() + ' ' + contentRange);
 
         return req;
     };
@@ -318,12 +322,31 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     var transferComplete = function(ev) {
         //console.log('transferComplete()')
 
+        // Lookup state
         var state = getCurrentUploadState();
-        updateStatus();
-        if(state !== null) {
+        if(state == null) {
+            console.log("Upload completed, but no corresponding state found!");
+            return; // Not sure how to handle this error - someone cleared their local storage during upload maybe?
+        }
+
+        // Handle response
+        var req = ev.target;
+        if(req.readyState < 4) {
+            return; // Not complete yet - invalid state
+        }
+
+        // Happy path
+        if(req.status === 200) {
             state.setPosition(state.getPosition() + CHUNK_SIZE);
             state.save();
+        } else {
+            if(timer) {
+                window.clearInterval(timer);
+            }
+            timer = window.setInterval(poll, ERROR_INTERVAL);
+            console.log("Unhandled response: " + req.status + ", retrying...")
         }
+        updateStatus();
         freeRequest(ev);
     };
 
