@@ -21,7 +21,9 @@ var UploadState = function(key, localStorage) {
     self.load = function() {
         var json = localStorage.getItem(key);
         state = JSON.parse(json);
-        data = Base64.decode(state.data);
+        if(state.data) {
+            data = Base64.decode(state.data);
+        }
     };
 
     self.save = function() {

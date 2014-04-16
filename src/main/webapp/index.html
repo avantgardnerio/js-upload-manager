@@ -10,13 +10,18 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="src/ResizeFilter.js"></script>
+    <script type="text/javascript" src="src/DefaultFilter.js"></script>
     <script type="text/javascript" src="src/UploadState.js"></script>
     <script type="text/javascript" src="src/UploadManager.js"></script>
     <script type="text/javascript" src="src/RingBuffer.js"></script>
+
     <script type="text/javascript">
         var exports = {};
 
         var manager = new UploadManager(FileReader, XMLHttpRequest, window, localStorage);
+        manager.addFilter(new ResizeFilter());
         manager.upload(); // Kick off any prior uploads
 
         manager.onProgress = function(state) {

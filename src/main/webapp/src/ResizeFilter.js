@@ -15,13 +15,10 @@ var ResizeFilter = function() {
     var URL_PREFIX = 'data:' + TARGET_FORMAT + ';base64,';
     var TARGET_QUALITY = 0.95;
 
-    self.onLoad = function(ev) {
-        var data = ev.data;
-        var callback = ev.callback;
-
+    self.onLoad = function(data, callback) {
         var b64imgData = Base64.encode(data);
         var img = new Image();
-        img.onload = function() {
+        img.addEventListener('load', function() {
             var canvas = document.createElement('canvas');
 
             // Calculate new size
@@ -49,8 +46,8 @@ var ResizeFilter = function() {
 
             // Upload!
             callback(byteArray);
-        };
-        img.src = URL_PREFIX + b64imgData;
+        }, false);
+        img.setAttribute('src', URL_PREFIX + b64imgData);
     };
 
     return self;

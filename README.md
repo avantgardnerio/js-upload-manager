@@ -33,8 +33,6 @@ TODO:
     * Should cache things in memory to avoid continually base64 decoding
 * More refactoring
     * FIFO functionality should be extracted out into LocalStorageQueue.js
-* Hook up support for filters
-    * ResizeFiler.js for reducing image size
 * Put bandwidth metrics back in
 * Pick a DI framework
     * Move away from constructor injection
@@ -46,6 +44,8 @@ TODO:
 
 Work Log
 --------
+* 2014-04-15
+    * Put Resize filter back
 * 2014-04-13
     * Test coverage report
     * Switched to maven as a build system

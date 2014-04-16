@@ -22,13 +22,16 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     var POLL_INTERVAL = 10;         // Set as needed according to bandwidth & latency
     var POST_URL = 'upload.php';
 
+    // TODO: Move to utility class
     var INTEGER = {
         'MAX_VALUE': Math.pow(2, 32)
     };
 
     var timer = null;
-    var running = false;
     var uploading = false;
+    var filters = [new DefaultFilter()];
+
+    // -------------------------------------------- Public API --------------------------------------------------------
 
     /**
      * Puts a file in the upload queue
@@ -46,8 +49,19 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
         var reader = new FileReader();
         reader.onload = function(ev) {
             var data = ev.target.result;
-            state.setData(data);
-            state.save();
+
+            var ar = filters.slice(0);
+            var callback = function(data) {
+                if(ar.length > 0) {
+                    var f2 = ar.pop();
+                    f2.onLoad(data, callback);
+                } else {
+                    state.setData(data);
+                    state.save();
+                }
+            };
+            var f1 = ar.pop();
+            f1.onLoad(data, callback);
         };
         reader.readAsArrayBuffer(file);
     };
@@ -59,7 +73,6 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
         if(timer !== null) {
             return; // Already running
         }
-        running = true;
         timer = window.setInterval(poll, POLL_INTERVAL);
     };
 
@@ -67,12 +80,8 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
      * Stops any uploads in progress
      */
     self.stop = function() {
-        if(running === false) {
-            return;
-        }
         window.clearInterval(timer);
         timer = null;
-        running = false;
     };
 
     /**
@@ -90,6 +99,19 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     };
 
     /**
+     * Adds an upload processing filter to the chain
+     * @param filter The filter to add
+     */
+    self.addFilter = function(filter) {
+        if(filters.indexOf(filter) >= 0) {
+            return;
+        }
+        filters.push(filter);
+    };
+
+    // -------------------------------------------------- Events ------------------------------------------------------
+
+    /**
      * Event listener for progress
      */
     self.onProgress = function(state) {
@@ -101,6 +123,9 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     self.onFileComplete = function() {
     };
 
+    // ------------------------------------------------ Private methods -----------------------------------------------
+
+    // TODO: Move to utility class
     var isInt = function(value) {
         if(isNaN(value)) {
             return false;
@@ -205,8 +230,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
         // Get the current upload state
         var state = getCurrentUploadState();
         if(state === null) {
-            console.log('poll() No work found, aborting.');
-            self.stop();
+            console.log('poll() No uploads left!');
             return; // Nothing to upload, or data still being loaded from disk
         }
 
