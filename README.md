@@ -21,7 +21,6 @@ TODO:
 -----
 * More and better tests
     * true unit tests
-    * higher coverage
     * Verify file contents
     * Simulate random network failures and verify contents are valid with MD5 hash
 * More robust keys for local storage
@@ -33,7 +32,6 @@ TODO:
     * Should cache things in memory to avoid continually base64 decoding
 * More refactoring
     * FIFO functionality should be extracted out into LocalStorageQueue.js
-* Put bandwidth metrics back in
 * Pick a DI framework
     * Move away from constructor injection
 * Update events to reflect multi-file support
@@ -46,6 +44,7 @@ Work Log
 --------
 * 2014-04-15
     * Put Resize filter back
+    * Put bandwidth metrics back in
 * 2014-04-13
     * Test coverage report
     * Switched to maven as a build system
