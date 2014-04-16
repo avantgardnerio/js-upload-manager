@@ -10,7 +10,7 @@ describe('ResizeFilter', function() {
     beforeEach(function() {
     });
 
-    it('should be resize', function() {
+    it('should be able to resize', function() {
         var filter = new ResizeFilter(ImageMock, new CanvasMock());
         var data = null;
         filter.onLoad(Resources.getImage1(), function(ret) {

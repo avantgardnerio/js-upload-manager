@@ -28,8 +28,8 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     };
 
     var timer = null;
-    var uploading = false;
     var filters = [new DefaultFilter()];
+    var tracker = new BandwidthTracker();
 
     // -------------------------------------------- Public API --------------------------------------------------------
 
@@ -107,6 +107,10 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
             return;
         }
         filters.push(filter);
+    };
+
+    self.getKbps = function() {
+        return tracker.getKbps();
     };
 
     // -------------------------------------------------- Events ------------------------------------------------------
@@ -223,14 +227,14 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
      */
     var poll = function() {
         //console.log('poll() Polling for work...');
-        if(uploading) {
+        if(tracker.isUploading()) {
             return; // Don't be re-entrant
         }
 
         // Get the current upload state
         var state = getCurrentUploadState();
         if(state === null) {
-            console.log('poll() No uploads left!');
+            //console.log('poll() No uploads left!');
             return; // Nothing to upload, or data still being loaded from disk
         }
 
@@ -261,9 +265,8 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
     var sendNextChunk = function(state) {
         var abv = getNextChunk(state);
         //console.log('sendNextChunk() sending ' + abv.length + ' bytes..');
-        //state.startUpload(abv.length); // TODO: Put tracking back in
         var req = createNextRequest(state);
-        uploading = true;
+        tracker.startUpload(abv.length);
         req.send(abv);
     };
 
@@ -304,7 +307,7 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
         req.removeEventListener('load', transferComplete);
         req.removeEventListener('error', transferFailed);
         req.removeEventListener('abort', transferCanceled);
-        uploading = false;
+        tracker.endUpload();
     };
 
     // -------------------------------------------- Status events -----------------------------------------------------
@@ -316,7 +319,6 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
         //console.log('transferComplete()')
 
         var state = getCurrentUploadState();
-        //state.endUpload(); // TODO: Put tracking back in
         updateStatus();
         if(state !== null) {
             state.setPosition(state.getPosition() + CHUNK_SIZE);
@@ -327,15 +329,11 @@ var UploadManager = function(FileReader, XMLHttpRequest, window, localStorage) {
 
     var transferFailed = function(ev) {
         console.log('transferFailed()');
-        //var state = getCurrentUploadState();
-        //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
     var transferCanceled = function(ev) {
         console.log('transferCanceled()');
-        //var state = getCurrentUploadState();
-        //state.endUpload();  // TODO: Put tracking back in
         freeRequest(ev);
     };
 
