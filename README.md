@@ -44,6 +44,7 @@ Work Log
 --------
 * 2014-04-16
     * Implemented WebDav compatible Java uploading
+    * .NET support
 * 2014-04-15
     * Put Resize filter back
     * Put bandwidth metrics back in
