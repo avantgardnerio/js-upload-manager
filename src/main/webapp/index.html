@@ -11,53 +11,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script type="text/javascript" src="src/RingBuffer.js"></script>
-    <script type="text/javascript" src="src/BandwidthTracker.js"></script>
-    <script type="text/javascript" src="src/ResizeFilter.js"></script>
-    <script type="text/javascript" src="src/DefaultFilter.js"></script>
-    <script type="text/javascript" src="src/UploadState.js"></script>
-    <script type="text/javascript" src="src/UploadManager.js"></script>
-
-    <script type="text/javascript">
-        var exports = {};
-
-        var manager = new UploadManager(FileReader, XMLHttpRequest, window, localStorage);
-        manager.addFilter(new ResizeFilter(Image, document));
-        manager.upload(); // Kick off any prior uploads
-
-        manager.onProgress = function(state) {
-            // TODO: jQuery
-            if(state !== null) {
-                document.getElementById("pbMain").style.width = state.getPercentText();
-                document.getElementById("tdFilename").innerHTML = state.getFilename();
-                document.getElementById("tdMimeType").innerHTML = state.getMimeType();
-                document.getElementById("tdPosition").innerHTML = state.getPosition();
-                document.getElementById("tdLength").innerHTML = state.getLength();
-                document.getElementById("tdBandwidth").innerHTML = manager.getKbps();
-            } else {
-                document.getElementById("pbMain").style.width = '0%';
-                //document.getElementById("tdFilename").innerHTML = '';
-                //document.getElementById("tdMimeType").innerHTML = '';
-                //document.getElementById("tdPosition").innerHTML = '';
-                document.getElementById("tdLength").innerHTML = '';
-                //document.getElementById("tdBandwidth").innerHTML = '';
-            }
-        };
-
-        var filesSelected = function(ev) {
-            var files = ev.target.files;
-            for(var i = 0; i < files.length; i++) {
-                var file = files[i];
-                manager.enqueue(file);
-            }
-            manager.upload();
-        };
-    </script>
-    <script type="text/javascript" src="src/base64.js"></script>
+    <script data-main="src/main" src="src/require.js"></script>
 </head>
 <body>
     <div>
-        <input type="file" name="file" accept="image/*" capture="camera" onchange="filesSelected(event)" />
+        <input id="fuMain" type="file" name="file" accept="image/*" capture="camera" />
     </div>
 
     <!-- TODO: Use 3rd party progress bar, don't reinvent the wheel -->

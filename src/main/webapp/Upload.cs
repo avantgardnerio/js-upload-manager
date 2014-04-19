@@ -50,10 +50,12 @@ namespace net.squarelabs
 			{
                 raf.Seek(start, SeekOrigin.Begin);
                 int count;
-                while((count = context.Request.InputStream.Read(buff, 0, BUFF_SIZE)) > 0) {
+                while((count = context.Request.InputStream.Read(buff, 0, BUFF_SIZE)) > 0)
+                {
                     raf.Write(buff, 0, count);
                 }
-                if(raf.Position >= length) {
+                if(raf.Position >= length)
+                {
                     // TODO: Write to a database blob or something application-specific
                 }
             } 
