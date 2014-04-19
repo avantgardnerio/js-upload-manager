@@ -19,6 +19,9 @@ This is most useful for mobile web apps, where a connection might be intermitten
 
 TODO:
 -----
+* Dependency injection
+    * Get require.js working with Jasmine
+    * Use require.js map to inject dependencies to tests
 * More and better tests
     * true unit tests
     * Verify file contents
@@ -32,8 +35,6 @@ TODO:
     * Should cache things in memory to avoid continually base64 decoding
 * More refactoring
     * FIFO functionality should be extracted out into LocalStorageQueue.js
-* Pick a DI framework
-    * Move away from constructor injection
 * Update events to reflect multi-file support
     * Update UI to handle new events
 * Use a real UI framework
@@ -42,6 +43,9 @@ TODO:
 
 Work Log
 --------
+* 2014-04-19
+    * Switched to require.js
+    * Broke tests
 * 2014-04-16
     * Implemented WebDav compatible Java uploading
     * .NET support
