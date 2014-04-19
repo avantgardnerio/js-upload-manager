@@ -22,19 +22,20 @@ TODO:
 * Dependency injection
     * Get require.js working with Jasmine
     * Use require.js map to inject dependencies to tests
-* More and better tests
-    * true unit tests
-    * Verify file contents
-    * Simulate random network failures and verify contents are valid with MD5 hash
+* More refactoring
+    * FIFO functionality should be extracted out into LocalStorageQueue.js
 * More robust keys for local storage
     * Switch away from plain-old-ints
     * Play better with other libraries
     * Don't stomp on other things that might be in local storage
-* Prompting the user to increase local storage space if files are too large
 * Stop repeatedly reloading from localStorage
     * Should cache things in memory to avoid continually base64 decoding
-* More refactoring
-    * FIFO functionality should be extracted out into LocalStorageQueue.js
+
+* More and better tests
+    * true unit tests
+    * Verify file contents
+    * Simulate random network failures and verify contents are valid with MD5 hash
+* Prompting the user to increase local storage space if files are too large
 * Update events to reflect multi-file support
     * Update UI to handle new events
 * Use a real UI framework
