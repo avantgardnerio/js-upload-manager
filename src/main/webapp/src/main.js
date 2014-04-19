@@ -31,12 +31,15 @@ require([
         }
     };
 
-    document.getElementById('fuMain').addEventListener('change', function(ev) {
-        var files = ev.target.files;
-        for(var i = 0; i < files.length; i++) {
-            var file = files[i];
-            manager.enqueue(file);
-        }
-        manager.upload();
-    });
+    var fuMain = document.getElementById('fuMain');
+    if(fuMain) {
+        fuMain.addEventListener('change', function(ev) {
+            var files = ev.target.files;
+            for(var i = 0; i < files.length; i++) {
+                var file = files[i];
+                manager.enqueue(file);
+            }
+            manager.upload();
+        });
+    }
 });
