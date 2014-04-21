@@ -45,7 +45,7 @@ TODO:
 Work Log
 --------
 * 2014-04-20
-    * Added test WebDav client that can browse directories with Apache2 and mod_dav
+    * Uploads working to plain-old-apache (with mod_dav)
     * Remove custom .NET project
     * Remove custom Java code
     * Remove custom PHP
