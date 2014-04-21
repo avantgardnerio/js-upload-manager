@@ -11,9 +11,70 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="Stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+    <link rel="Stylesheet" type="text/css" href="css/main.css" />
+
+    <script type="text/javascript" src="src/lib/jquery-1.11.0.js"></script>
+
     <script data-main="src/main" src="src/require.js"></script>
+
+    <script type="text/javascript">
+        var propsBody = document.implementation.createDocument("DAV:", "propfind", null);
+        propsBody.documentElement.appendChild(propsBody.createElementNS('DAV:', 'allprop'));
+        var serializer = new XMLSerializer();
+        var str = '<?xml version="1.0" encoding="utf-8" ?>' + serializer.serializeToString(propsBody);
+
+        $.ajax({
+            type: "PROPFIND",
+            url: "../webdav1/",
+            data: str,
+            dataType: "xml",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Depth', '1');
+                xhr.setRequestHeader('Content-Type', 'application/xml');
+            },
+            success: function(xml) {
+                var list = $('.fileList');
+                for(var statusIndex = 0; statusIndex < xml.children.length; statusIndex++) {
+                    var status = xml.children[statusIndex];
+                    for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
+                        var response = status.children[responseIndex];
+                        var propstat = response.getElementsByTagName("propstat")[0];
+                        var href = response.getElementsByTagName("href")[0];
+
+                        var row = $('<tr/>');
+                        row.append($('<td/>').html(href));
+
+                        var props = response.getElementsByTagName("prop")[0];
+                        addCell(row, props.getElementsByTagName("getcontenttype")[0]);
+                        addCell(row, props.getElementsByTagName("getcontentlength")[0]);
+                        addCell(row, props.getElementsByTagName("creationdate")[0]);
+                        addCell(row, props.getElementsByTagName("getlastmodified")[0]);
+
+                        list.append(row);
+                    }
+                }
+            }
+        });
+
+        var addCell = function(row, el) {
+            var text = el ? el.textContent : '';
+            row.append($('<td/>').html(text));
+        };
+
+    </script>
 </head>
 <body>
+    <table class='fileList table'>
+        <tr>
+            <th>Filename</th>
+            <th>Type</th>
+            <th>Length</th>
+            <th>Created</th>
+            <th>Modified</th>
+        </tr>
+    </table>
+
     <div>
         <input id="fuMain" type="file" name="file" accept="image/*" capture="camera" />
     </div>
