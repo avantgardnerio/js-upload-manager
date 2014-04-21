@@ -44,6 +44,8 @@ TODO:
 
 Work Log
 --------
+* 2014-04-20
+    * Added test WebDav client that can browse directories with Apache2 and mod_dav
 * 2014-04-19
     * Switched to require.js
     * Broke tests
