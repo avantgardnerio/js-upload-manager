@@ -20,6 +20,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/src/main/webapp/bin" />
       <excludeFolder url="file://$MODULE_DIR$/src/main/webapp/uploads" />
+      <excludeFolder url="file://$MODULE_DIR$/src/main/webapp/upman" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
