@@ -46,6 +46,10 @@ Work Log
 --------
 * 2014-04-20
     * Added test WebDav client that can browse directories with Apache2 and mod_dav
+    * Remove custom .NET project
+    * Remove custom Java code
+    * Remove custom PHP
+    * Let Apache/IIS be the WebDav server
 * 2014-04-19
     * Switched to require.js
     * Broke tests
