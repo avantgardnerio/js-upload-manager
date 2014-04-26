@@ -17,6 +17,15 @@ to a web server:
 This is most useful for mobile web apps, where a connection might be intermittent or slow.
 
 
+Setup
+-----
+* Use any server that supports WebDAV (IIS or Apache)
+* Enable a writable WebDAV directory at /webdav1/
+    * Apache instructions here: http://ubuntuguide.org/wiki/WebDAV
+* Host the JavaScript and HTML files at /
+* Upload!
+
+
 TODO:
 -----
 * Dependency injection
