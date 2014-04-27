@@ -34,6 +34,7 @@ define(function(require, exports, module) {
         // ----------------------------------------- Private methods --------------------------------------------------
         var onCreate = function() {
             var filename = createFolder.getText();
+            client.createFolder(filename);
         };
 
         var showPopup = function() {

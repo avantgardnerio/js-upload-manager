@@ -12,13 +12,15 @@ define(function(require, exports, module) {
 
     var List = require('collections/List');
 
-    return function(rootPath) {
+    var WebDavClient = function(rootPath) {
 
         var self = {};
 
+        // ----------------------------------------- Private members --------------------------------------------------
         var path = '';
         var files = new List();
 
+        // ----------------------------------------- Public methods ---------------------------------------------------
         self.getCurrentPath = function() {
             return rootPath + path;
         };
@@ -27,29 +29,15 @@ define(function(require, exports, module) {
             return files;
         };
 
-        // TODO: Better OO
-        var readXml = function(xml) {
-            files.clear();
-            for(var statusIndex = 0; statusIndex < xml.children.length; statusIndex++) {
-                var status = xml.children[statusIndex];
-                for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
-                    var response = status.children[responseIndex];
-                    var propstat = response.getElementsByTagName('propstat')[0];
-                    var href = response.getElementsByTagName('href')[0].innerHTML;
-                    var props = response.getElementsByTagName('prop')[0];
-
-                    href = href.substr(path.length);
-                    var file = {
-                        'href': path + href,
-                        'contentType': props.getElementsByTagName('getcontenttype')[0],
-                        'contentLength': props.getElementsByTagName('getcontentlength')[0],
-                        'creationDate': props.getElementsByTagName('creationdate')[0],
-                        'lastModified': props.getElementsByTagName('getlastmodified')[0]
-                    };
-                    files.addItem(file);
+        self.createFolder = function(filename) {
+            $.ajax({
+                type: 'MKCOL',
+                url: self.getCurrentPath() + filename,
+                success: function() {
+                    self.update();
                 }
-            }
-            return files;
+                // TODO: Handle failure
+            });
         };
 
         self.update = function() {
@@ -74,9 +62,42 @@ define(function(require, exports, module) {
             });
         };
 
-        // Initialize
-        self.update();
+        // ----------------------------------------- Private methods --------------------------------------------------
+
+        // TODO: Better OO (return files - don't change state)
+        var readXml = function(xml) {
+            files.clear();
+            for(var statusIndex = 0; statusIndex < xml.children.length; statusIndex++) {
+                var status = xml.children[statusIndex];
+                for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
+                    var response = status.children[responseIndex];
+                    var propstat = response.getElementsByTagName('propstat')[0];
+                    var href = response.getElementsByTagName('href')[0].innerHTML;
+                    var props = response.getElementsByTagName('prop')[0];
+
+                    href = href.substr(path.length);
+                    var file = {
+                        'href': path + href,
+                        'contentType': props.getElementsByTagName('getcontenttype')[0],
+                        'contentLength': props.getElementsByTagName('getcontentlength')[0],
+                        'creationDate': props.getElementsByTagName('creationdate')[0],
+                        'lastModified': props.getElementsByTagName('getlastmodified')[0]
+                    };
+                    files.addItem(file);
+                }
+            }
+            return files;
+        };
+
+        // ------------------------------------------- Constructor ----------------------------------------------------
+        var ctor = function() {
+            self.update();
+        };
+
+        ctor();
 
         return self;
-    }
+    };
+
+    return WebDavClient;
 });
