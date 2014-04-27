@@ -67,6 +67,10 @@
                             <jsSrcDir>${project.basedir}/src/main/webapp/src</jsSrcDir>
                             <jsTestSrcDir>${project.basedir}src/main/webapp/src/spec</jsTestSrcDir>
                             <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
+                            <debug>true</debug>
+                            <manualSpecRunnerHtmlFileName>${project.basedir}src/main/webapp/SpecRunner.html</manualSpecRunnerHtmlFileName>
+                            <haltOnFailure>true</haltOnFailure>
+                            <specRunnerHtmlFileName>${project.basedir}src/main/webapp/SpecRunner.html</specRunnerHtmlFileName>
                         </configuration>
                     </execution>
                 </executions>
