@@ -6,5 +6,5 @@
  * Licensed under the MIT license.
  */
 define(function(require, exports, module) {
-    return XMLHttpRequest;
+    return window;
 });

@@ -1,14 +1,7 @@
-/*
- * js-upload-manager
- * https://github.com/bgard6977/js-upload-manager/
- *
- * Copyright (c) 2014 Brent Gardner
- * Licensed under the MIT license.
- */
-var TimerMock = function(timeout) {
-    var self = {};
+define(function(require, exports, module) {
+    var window = {};
 
-    timeout = timeout || 10000; // Ten second default timeout
+    var timeout = 10000; // Ten second default timeout
 
     var running = true;
 
@@ -18,7 +11,7 @@ var TimerMock = function(timeout) {
      * @param interval An interval with which to call back
      * @returns {{}}
      */
-    self.setInterval = function(callback, interval) {
+    window.setInterval = function(callback, interval) {
         var start = now();
         while(running && now() - start < timeout) {
             var ev = {};
@@ -32,7 +25,7 @@ var TimerMock = function(timeout) {
      * Stops the current timer
      * @param token Ignored parameter for compatibility with the standard API
      */
-    self.clearInterval = function(token) {
+    window.clearInterval = function(token) {
         running = false;
     };
 
@@ -54,5 +47,5 @@ var TimerMock = function(timeout) {
         }
     };
 
-    return self;
-};
+    return window;
+});

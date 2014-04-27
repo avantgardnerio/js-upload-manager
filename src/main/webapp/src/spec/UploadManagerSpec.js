@@ -5,14 +5,21 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
+require.config({
+    map: {
+        '*': {
+            'real': 'mock'
+        }
+    }
+});
 define([
+    'events/ProgressEvent',
     'mock/FileMock',
-    'mock/LocalStorageMock',
     'uploads/UploadManager',
     'resource/Resources'
 ], function (
+    ProgressEvent,
     FileMock,
-    LocalStorageMock,
     UploadManager,
     Resources
     ) {
@@ -20,7 +27,6 @@ define([
         var manager;
         var file1 = new FileMock('test1.jpg', 'image/jpeg', Resources.getImage1());
         var file2 = new FileMock('test2.jpg', 'image/jpeg', Resources.getImage2());
-        var localStorage = new LocalStorageMock();
 
         beforeEach(function() {
             manager = new UploadManager();
@@ -32,16 +38,16 @@ define([
         });
 
         it('should be able to upload files', function() {
-            var isDone = false;
-            manager.onFileComplete = function() {
-                isDone = true;
-            };
+            var count = 0;
+            manager.addEventListener(ProgressEvent.TYPE, function(ev) {
+                count++;
+            });
 
             manager.enqueue(file1);
             manager.enqueue(file2);
 
             manager.upload();
-            expect(isDone).toBe(true);
+            expect(count).toBe(32); // currently the test files are 32 blocks long
         });
 
     });
