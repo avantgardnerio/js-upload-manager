@@ -15,11 +15,13 @@ require.config({
 define([
     'events/ProgressEvent',
     'mock/FileMock',
+    'mock/localStorage',
     'uploads/UploadManager',
     'resource/Resources'
 ], function (
     ProgressEvent,
     FileMock,
+    localStorage,
     UploadManager,
     Resources
     ) {
