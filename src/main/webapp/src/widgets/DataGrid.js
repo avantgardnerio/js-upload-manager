@@ -23,9 +23,13 @@ define(function(require, exports, module) {
         var renderer = new RowRenderer(columnNames);
 
         // ----------------------------------------- Public methods ---------------------------------------------------
-        self.setDataSource = function(ds) {
-            dataSource = ds;
-            dataSource.addEventListener('listChange', render)
+        self.setDataSource = function(val) {
+            dataSource = val;
+            dataSource.addEventListener('listChange', render);
+        };
+
+        self.setRenderer = function(val) {
+            renderer = val;
         };
 
         self.getElement = function() {

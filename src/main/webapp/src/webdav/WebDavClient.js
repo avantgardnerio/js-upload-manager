@@ -77,16 +77,28 @@ define(function(require, exports, module) {
 
                     href = href.substr(path.length);
                     var file = {
-                        'href': path + href,
-                        'contentType': props.getElementsByTagName('getcontenttype')[0],
-                        'contentLength': props.getElementsByTagName('getcontentlength')[0],
-                        'creationDate': props.getElementsByTagName('creationdate')[0],
-                        'lastModified': props.getElementsByTagName('getlastmodified')[0]
+                        href: path + href,
+                        contentType: getText(props, 'getcontenttype'),
+                        contentLength: getText(props, 'getcontentlength'),
+                        creationDate: getText(props, 'creationdate'),
+                        lastModified: getText(props, 'getlastmodified')
                     };
                     files.addItem(file);
                 }
             }
             return files;
+        };
+
+        var getText = function(props, name) {
+            var val = props.getElementsByTagName(name);
+            if(!val) {
+                return '';
+            }
+            val = val[0];
+            if(!val) {
+                return '';
+            }
+            return val.innerHTML;
         };
 
         // ------------------------------------------- Constructor ----------------------------------------------------

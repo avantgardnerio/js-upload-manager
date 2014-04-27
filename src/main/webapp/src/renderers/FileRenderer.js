@@ -6,15 +6,18 @@
  * Licensed under the MIT license.
  */
 /**
- * The default renderer for DataGrid rows
+ * A DataGrid renderer specific to files
  */
 define(function(require, exports, module) {
 
-    var RowRenderer = function(columnNames) {
+    var RowRenderer = require('renderers/RowRenderer');
 
-        var self = {};
+    var FileRenderer = function(columnNames) {
+
+        var self = new RowRenderer(columnNames);
 
         // ----------------------------------------- Private members --------------------------------------------------
+        var curentPath = '';
 
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.render = function(index, item) {
@@ -22,14 +25,25 @@ define(function(require, exports, module) {
             for(var i = 0; i < columnNames.length; i++) {
                 var column = columnNames[i];
                 var val = item[column];
-                self.addCell(row, val);
+                if(column === 'href') {
+                    var path = val.substr(curentPath.length);
+                    var link = val;
+                    if(path === '') {
+                        path = '.';
+                    }
+                    if(item.contentType === 'httpd/unix-directory') {
+                        link = 'javascript:alert("hi");';
+                    }
+                    row.append($('<td/>').append($('<a/>').attr('href', link).text(path)));
+                } else {
+                    self.addCell(row, val);
+                }
             }
             return row;
         };
 
-        self.addCell = function(row, el) {
-            var text = el ? el.textContent : '';
-            row.append($('<td/>').html(text));
+        self.setPath = function(val) {
+            curentPath = val;
         };
 
         // ----------------------------------------- Private methods --------------------------------------------------
@@ -43,5 +57,5 @@ define(function(require, exports, module) {
         return self;
     };
 
-    return RowRenderer;
+    return FileRenderer;
 });
