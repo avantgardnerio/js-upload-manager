@@ -57,3 +57,23 @@ http://tympanus.net/codrops/2013/11/07/css-overlay-techniques/
     display: block;
 }
 
+.buttonBar {
+    width: 100%;
+    text-align: center;
+}
+
+.buttonBar input {
+    display: inline;
+}
+
+.progressBar {
+    border: 1px solid black;
+    padding: 1px;
+    width: 100%;
+}
+
+.progressBar div {
+    background-color: cornflowerblue;
+    width: 0%;
+    height: 20px;
+}

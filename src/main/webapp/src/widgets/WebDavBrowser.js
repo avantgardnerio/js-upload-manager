@@ -10,10 +10,20 @@
  */
 define(function(require, exports, module) {
 
-    var WebDavClient = require('webdav/WebDavClient');
-    var DataGrid = require('widgets/DataGrid');
-    var CreateFolder = require('widgets/CreateFolder');
+    var ProgressEvent = require('events/ProgressEvent');
+
+    var ResizeFilter = require('filters/ResizeFilter');
+
     var FileRenderer = require('renderers/FileRenderer');
+
+    var UploadManager = require('uploads/UploadManager');
+
+    var WebDavClient = require('webdav/WebDavClient');
+
+    var CreateFolder = require('widgets/CreateFolder');
+    var DataGrid = require('widgets/DataGrid');
+    var ProgressBar = require('widgets/ProgressBar');
+    var UploadStats = require('widgets/UploadStats');
 
     var WebDavBrowser = function() {
 
@@ -25,6 +35,10 @@ define(function(require, exports, module) {
         var fileRenderer = new FileRenderer(columnNames);
         var grid = new DataGrid(columnNames);
         var createFolder = new CreateFolder();
+        var manager = new UploadManager();
+        var stats = new UploadStats();
+        var pbMain = new ProgressBar();
+
         var el = $('<div/>');
         var popupHolder = $('<div/>');
         var fileHolder = $('<div/>');
@@ -52,6 +66,26 @@ define(function(require, exports, module) {
             }
         };
 
+        var onFileSelect = function(ev) {
+            var files = ev.target.files;
+            for(var i = 0; i < files.length; i++) {
+                var file = files[i];
+                manager.enqueue(file);
+            }
+            manager.upload();
+        };
+
+        var onProgress = function(ev) {
+            var state = ev.getStatus();
+            var percent = state ? state.getPercent() : 0;
+            pbMain.setPercent(percent);
+            stats.setState(state);
+
+            if(!state) {
+                client.update(); // File was completed
+            }
+        };
+
         // ------------------------------------------- Constructor ----------------------------------------------------
         var ctor = function() {
             el.append(popupHolder);
@@ -63,13 +97,23 @@ define(function(require, exports, module) {
 
             fileRenderer.setPath(client.getCurrentPath());
 
+            manager.addFilter(new ResizeFilter(Image, document));
+            manager.addEventListener(ProgressEvent.TYPE, onProgress);
+            manager.upload(); // Kick off any prior uploads
+
             grid.setRenderer(fileRenderer);
             grid.setDataSource(client.getFiles());
 
             fileHolder.load('templates/WebDavBrowser.html', function() {
-                fileHolder.find('.fileList').append(grid.getElement());
+                // Elements owned by this widget
                 fileHolder.find('.newFolder').click(showPopup);
                 fileHolder.find('.btnDelete').click(onDelete);
+                fileHolder.find('.fileSelect').change(onFileSelect)
+
+                // Child widgets
+                fileHolder.find('.fileList').append(grid.getElement());
+                fileHolder.find('.usMain').append(stats.getElement());
+                fileHolder.find('.pbMain').append(pbMain.getElement());
             });
         };
 

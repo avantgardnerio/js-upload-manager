@@ -18,39 +18,7 @@
 
     <script data-main="src/main" src="src/require.js"></script>
 </head>
-<body>
-    <div class="webDavBrowser"></div>
-
-    <div>
-        <input id="fuMain" type="file" name="file" accept="image/*" capture="camera" />
-    </div>
-
-    <!-- TODO: Use 3rd party progress bar, don't reinvent the wheel -->
-    <div style="border: 1px solid black; padding: 1px; width: 100%;">
-        <div id="pbMain" style="background-color: cornflowerblue; width: 0%; height: 20px;">
-        </div>
-    </div>
-    <table>
-        <tr>
-            <td>Current file name:</td>
-            <td id="tdFilename"></td>
-        </tr>
-        <tr>
-            <td>Detected mime type:</td>
-            <td id="tdMimeType"></td>
-        </tr>
-        <tr>
-            <td>Confirmed bytes:</td>
-            <td id="tdPosition"></td>
-        </tr>
-        <tr>
-            <td>Total bytes:</td>
-            <td id="tdLength"></td>
-        </tr>
-        <tr>
-            <td>Kbps:</td>
-            <td id="tdBandwidth"></td>
-        </tr>
-    </table>
-</body>
+    <body>
+        <div class="webDavBrowser"></div>
+    </body>
 </html>
