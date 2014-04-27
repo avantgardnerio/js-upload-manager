@@ -12,9 +12,9 @@ define(function(require, exports, module) {
 
     var RowRenderer = require('renderers/RowRenderer');
 
-    var FileRenderer = function(columnNames) {
+    var FileRenderer = function(colNames) {
 
-        var self = new RowRenderer(columnNames);
+        var self = new RowRenderer(colNames);
 
         // ----------------------------------------- Private members --------------------------------------------------
         var curentPath = '';
@@ -22,10 +22,10 @@ define(function(require, exports, module) {
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.render = function(index, item) {
             var row = $('<tr/>');
-            for(var i = 0; i < columnNames.length; i++) {
-                var column = columnNames[i];
-                var val = item[column];
-                if(column === 'href') {
+            for(var i = 0; i < colNames.length; i++) {
+                var colName = colNames[i];
+                var val = item[colName];
+                if(colName === 'href') {
                     var path = val.substr(curentPath.length);
                     var link = val;
                     if(path === '') {
@@ -36,7 +36,7 @@ define(function(require, exports, module) {
                     }
                     row.append($('<td/>').append($('<a/>').attr('href', link).text(path)));
                 } else {
-                    self.addCell(row, val);
+                    row.append($('<td/>').html(val));
                 }
             }
             return row;
