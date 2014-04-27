@@ -1218,7 +1218,12 @@ var requirejs, require, define;
             while (defQueue.length) {
                 args = defQueue.shift();
                 if (args[0] === null) {
-                    return onError(makeError('mismatch', 'Mismatched anonymous define() module: ' + args[args.length - 1]));
+                    var text = args[args.length - 1];
+                    if(text) {
+                        text = text.toString();
+                        text = text.substring(0, 100);
+                    }
+                    return onError(makeError('mismatch', 'Mismatched anonymous define() module: ' + text));
                 } else {
                     //args are id, deps, factory. Should be normalized by the
                     //define() function.
