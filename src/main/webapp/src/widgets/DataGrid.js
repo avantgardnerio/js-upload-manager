@@ -10,16 +10,17 @@
  */
 define(function(require, exports, module) {
 
-    return function(columnNames) {
+    var DataGrid = function(columnNames) {
 
         var self = {};
 
+        // ----------------------------------------- Private members --------------------------------------------------
         var table = $('<table/>');
         var header = $('<tr/>')
-
         var dataSource = {};
         var columns = [];
 
+        // ----------------------------------------- Public methods ---------------------------------------------------
         self.setDataSource = function(ds) {
             dataSource = ds;
             dataSource.addEventListener('listChange', render)
@@ -29,6 +30,7 @@ define(function(require, exports, module) {
             return table;
         };
 
+        // ----------------------------------------- Private methods --------------------------------------------------
         var clear = function() {
             table.find('tr').each(function(i, tr) {
                 if(i > 0) {
@@ -62,6 +64,7 @@ define(function(require, exports, module) {
             row.append($('<td/>').html(text));
         };
 
+        // ------------------------------------------- Constructor ----------------------------------------------------
         var ctor = function() {
             table.append(header);
             table.addClass('dataGrid');
@@ -77,5 +80,7 @@ define(function(require, exports, module) {
         ctor();
 
         return self;
-    }
+    };
+
+    return DataGrid;
 });
