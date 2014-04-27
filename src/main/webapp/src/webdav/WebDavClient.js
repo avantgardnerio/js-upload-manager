@@ -40,6 +40,17 @@ define(function(require, exports, module) {
             });
         };
 
+        self.delete = function(filename) {
+            $.ajax({
+                type: 'DELETE',
+                url: self.getCurrentPath() + filename,
+                success: function() {
+                    self.update();
+                }
+                // TODO: Handle failure
+            });
+        };
+
         self.update = function() {
             var propsBody = document.implementation.createDocument('DAV:', 'propfind', null);
             propsBody.documentElement.appendChild(propsBody.createElementNS('DAV:', 'allprop'));

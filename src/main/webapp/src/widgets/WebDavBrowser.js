@@ -44,6 +44,10 @@ define(function(require, exports, module) {
             createFolder.show();
         };
 
+        var onDelete = function() {
+
+        };
+
         // ------------------------------------------- Constructor ----------------------------------------------------
         var ctor = function() {
             el.append(popupHolder);
@@ -61,6 +65,7 @@ define(function(require, exports, module) {
             fileHolder.load('templates/WebDavBrowser.html', function() {
                 fileHolder.find('.fileList').append(grid.getElement());
                 fileHolder.find('.newFolder').click(showPopup);
+                fileHolder.find('.btnDelete').click(onDelete);
             });
         };
 

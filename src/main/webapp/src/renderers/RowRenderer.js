@@ -10,9 +10,11 @@
  */
 define(function(require, exports, module) {
 
+    var EventDispatcher = require('events/EventDispatcher');
+
     var RowRenderer = function(colNames) {
 
-        var self = {};
+        var self = new EventDispatcher();
 
         // ----------------------------------------- Private members --------------------------------------------------
 

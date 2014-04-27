@@ -11,6 +11,7 @@
 define(function(require, exports, module) {
 
     var RowRenderer = require('renderers/RowRenderer');
+    var SelectionEvent = require('events/SelectionEvent')
 
     var FileRenderer = function(colNames) {
 
@@ -20,24 +21,18 @@ define(function(require, exports, module) {
         var curentPath = '';
 
         // ----------------------------------------- Public methods ---------------------------------------------------
-        self.render = function(index, item) {
+        self.render = function(index, item, selectedItems) {
             var row = $('<tr/>');
             for(var i = 0; i < colNames.length; i++) {
                 var colName = colNames[i];
-                var val = item[colName];
+                var text = item[colName];
+                var cell = $('<td/>');
                 if(colName === 'href') {
-                    var path = val.substr(curentPath.length);
-                    var link = val;
-                    if(path === '') {
-                        path = '.';
-                    }
-                    if(item.contentType === 'httpd/unix-directory') {
-                        link = 'javascript:alert("hi");';
-                    }
-                    row.append($('<td/>').append($('<a/>').attr('href', link).text(path)));
+                    createLink(text, item, cell, selectedItems);
                 } else {
-                    row.append($('<td/>').html(val));
+                    cell.html(text);
                 }
+                row.append(cell);
             }
             return row;
         };
@@ -47,6 +42,32 @@ define(function(require, exports, module) {
         };
 
         // ----------------------------------------- Private methods --------------------------------------------------
+        var createLink = function(text, item, cell, selectedItems) {
+            // Calculate path
+            var path = text.substr(curentPath.length);
+            var href = text;
+            if (path === '') {
+                path = '.';
+            }
+            if (item.contentType === 'httpd/unix-directory') {
+                href = 'javascript:alert("hi");';
+            }
+            var selected = selectedItems.indexOf(item) >= 0;
+
+            // Checkbox
+            var checkbox = $('<input/>');
+            checkbox.attr('type', 'checkbox');
+            checkbox.prop('checked', selected);
+            checkbox.click(function() {
+                var checked = checkbox.prop('checked');
+                self.dispatch(new SelectionEvent(item, checked));
+            });
+            cell.append(checkbox);
+
+            // Link
+            var link = $('<a/>').attr('href', href).text(path);
+            cell.append(link);
+        };
 
         // ------------------------------------------- Constructor ----------------------------------------------------
         var ctor = function() {

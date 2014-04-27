@@ -10,23 +10,23 @@
  */
 define(function(require, exports, module) {
 
-    var Event = require('events/Event');
+    var ChangeEvent = require('events/ChangeEvent');
     var EventDispatcher = require('events/EventDispatcher');
 
-    return function() {
+    var List = function() {
 
         var self = new EventDispatcher();
 
         var items = [];
 
         var fireChange = function() {
-            self.dispatch(new Event('listChange'));
+            self.dispatch(new ChangeEvent());
         };
 
         self.clear = function() {
             items = [];
             fireChange();
-        }
+        };
 
         self.addItem = function(item) {
             items.push(item);
@@ -42,5 +42,7 @@ define(function(require, exports, module) {
         };
 
         return self;
-    }
+    };
+
+    return List;
 });

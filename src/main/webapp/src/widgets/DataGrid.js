@@ -10,6 +10,8 @@
  */
 define(function(require, exports, module) {
 
+    var ChangeEvent = require('events/ChangeEvent');
+    var SelectionEvent = require('events/SelectionEvent');
     var RowRenderer = require('renderers/RowRenderer');
 
     var DataGrid = function(columnNames) {
@@ -19,24 +21,51 @@ define(function(require, exports, module) {
         // ----------------------------------------- Private members --------------------------------------------------
         var table = $('<table/>');
         var header = $('<tr/>')
-        var dataSource = {};
+        var dataSource = null;
+        var selectedItems = [];
         var renderer = new RowRenderer(columnNames);
 
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.setDataSource = function(val) {
+            if(dataSource !== null) {
+                dataSource.removeEventListener(ChangeEvent.TYPE, render);
+            }
             dataSource = val;
-            dataSource.addEventListener('listChange', render);
+            dataSource.addEventListener(ChangeEvent.TYPE, render);
         };
 
         self.setRenderer = function(val) {
+            if(renderer) {
+                renderer.removeEventListener(SelectionEvent.TYPE, render);
+            }
             renderer = val;
+            renderer.addEventListener(SelectionEvent.TYPE, onSelect);
         };
 
         self.getElement = function() {
             return table;
         };
 
+        self.getSelectedItems = function() {
+            return selectedItems;
+        };
+
         // ----------------------------------------- Private methods --------------------------------------------------
+        var onSelect = function(ev) {
+            var item = ev.getItem();
+            if(ev.getSelected()) {
+                if(selectedItems.indexOf(item) < 0) {
+                    selectedItems.push(item);
+                }
+            } else {
+                var index = selectedItems.indexOf(item);
+                if(index >= 0) {
+                    selectedItems.splice(index, 1);
+                }
+            }
+            render();
+        };
+
         var clear = function() {
             table.find('tr').each(function(i, tr) {
                 if(i > 0) {
@@ -49,7 +78,7 @@ define(function(require, exports, module) {
             clear();
             for(var i = 0; i < dataSource.getLength(); i++) {
                 var item = dataSource.getItemAt(i);
-                var row = renderer.render(i, item);
+                var row = renderer.render(i, item, selectedItems);
                 table.append(row);
             }
         };
