@@ -42,7 +42,7 @@ define(function(require, exports, module) {
         };
 
         self.dispatch = function(ev) {
-            var ar = listeners[ev.type];
+            var ar = listeners[ev.getType()];
             if(ar === undefined) {
                 return;
             }

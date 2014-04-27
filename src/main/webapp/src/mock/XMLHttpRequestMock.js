@@ -6,6 +6,7 @@
  * Licensed under the MIT license.
  */
 var XMLHttpRequestMock = function() {
+
     var self = new EventDispatcher();
 
     self.open = function(method, url, async) {
@@ -18,10 +19,8 @@ var XMLHttpRequestMock = function() {
     };
 
     self.send = function(body) {
-        var ev = {
-            'type': 'load',
-            'target': self
-        };
+        var ev = new Event('load');
+        ev.target = self;
         self.status = 200;
         self.dispatch(ev);
     };

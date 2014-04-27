@@ -12,14 +12,26 @@ define(function(require, exports, module) {
 
     var WebDavClient = require('webdav/WebDavClient');
     var DataGrid = require('widgets/DataGrid');
+    var CreateFolder = require('widgets/CreateFolder');
 
     return function() {
 
         var self = {};
 
+        var createFolder = new CreateFolder();
+        createFolder.addEventListener('cancel', function() {
+            createFolder.hide();
+        });
+        createFolder.addEventListener('create', function() {
+            createFolder.hide();
+        });
+
         var el = $('<div/>');
+
         var popupHolder = $('<div/>');
         el.append(popupHolder);
+        popupHolder.append(createFolder.getElement());
+
         var fileHolder = $('<div/>');
         el.append(fileHolder);
 
@@ -28,7 +40,7 @@ define(function(require, exports, module) {
         };
 
         var showPopup = function() {
-            popupHolder.load('templates/CreateFolder.html');
+            createFolder.show();
         };
 
         var ctor = function() {

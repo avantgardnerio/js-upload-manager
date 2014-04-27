@@ -10,6 +10,7 @@
  */
 define(function(require, exports, module) {
 
+    var Event = require('events/Event');
     var EventDispatcher = require('events/EventDispatcher');
 
     return function() {
@@ -19,10 +20,7 @@ define(function(require, exports, module) {
         var items = [];
 
         var fireChange = function() {
-            var ev = {
-                'type': 'listChange'
-            };
-            self.dispatch(ev);
+            self.dispatch(new Event('listChange'));
         };
 
         self.clear = function() {
