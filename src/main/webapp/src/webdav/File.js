@@ -21,6 +21,39 @@ define(function(require, exports, module) {
         lastModified: 'getlastmodified'
     };
 
+    var TYPE = {
+        DIRECTORY: 'httpd/unix-directory'
+    };
+
+    var COMPARATOR = function(left, right) {
+        if(!left && !right) {
+            return 0;
+        }
+        if(!left) {
+            return -1;
+        }
+        if(!right) {
+            return 1;
+        }
+        var leftType = left.getContentType();
+        var rightType = right.getContentType();
+        if(leftType < rightType) {
+            return -1;
+        }
+        if(leftType > rightType) {
+            return 1;
+        }
+        var leftPath = left.getRelativePath();
+        var rightPath = right.getRelativePath();
+        if(leftPath < rightPath) {
+            return -1;
+        }
+        if(leftPath > rightPath) {
+            return 1;
+        }
+        return 0;
+    };
+
     var File = function(response, rootPath) {
 
         var self = {};
@@ -77,6 +110,9 @@ define(function(require, exports, module) {
 
         return self;
     };
+
+    File.COMPARATOR = COMPARATOR;
+    File.TYPE = TYPE;
 
     return File;
 });

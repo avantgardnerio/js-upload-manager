@@ -19,6 +19,7 @@ define(function(require, exports, module) {
 
     var UploadManager = require('uploads/UploadManager');
 
+    var File = require('webdav/File');
     var WebDavClient = require('webdav/WebDavClient');
 
     var CreateFolder = require('widgets/CreateFolder');
@@ -90,7 +91,7 @@ define(function(require, exports, module) {
 
         var onSelect = function(ev) {
             var item = ev.getItem();
-            if (item.getContentType() !== 'httpd/unix-directory') {
+            if (item.getContentType() !== File.TYPE.DIRECTORY) {
                 return;
             }
             fileRenderer.setPath(item.getPath());

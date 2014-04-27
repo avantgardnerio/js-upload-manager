@@ -14,6 +14,8 @@ define(function (require, exports, module) {
 
     var RowRenderer = require('renderers/RowRenderer');
 
+    var File = require('webdav/File');
+
     var FileRenderer = function (colNames) {
 
         var self = new RowRenderer(colNames);
@@ -55,7 +57,7 @@ define(function (require, exports, module) {
             if (currentPath.length > text.length) {
                 path = '..';
             }
-            if (item.getContentType() === 'httpd/unix-directory') {
+            if (item.getContentType() === File.TYPE.DIRECTORY) {
                 href = '#path=' + item.getPath();
                 link.click(function () {
                     self.dispatch(new SelectionEvent(item, true));

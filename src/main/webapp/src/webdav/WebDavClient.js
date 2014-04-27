@@ -78,7 +78,8 @@ define(function(require, exports, module) {
                     xhr.setRequestHeader('Content-Type', 'application/xml');
                 },
                 success: function(xml) {
-                    readXml(xml);
+                    var newFiles = readXml(xml);
+                    files.copy(newFiles);
                 }
                 // TODO: Handle failure
             });
@@ -88,7 +89,7 @@ define(function(require, exports, module) {
 
         // TODO: Better OO (return files - don't change state)
         var readXml = function(xml) {
-            files.clear();
+            var files = new List();
 
             // Translate the XML into File objects
             for(var statusIndex = 0; statusIndex < xml.children.length; statusIndex++) {
@@ -96,7 +97,7 @@ define(function(require, exports, module) {
                 for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
                     var response = status.children[responseIndex];
                     var file = new File(response, rootPath);
-                    if(file.getContentType() === 'httpd/unix-directory') {
+                    if(file.getContentType() === File.TYPE.DIRECTORY) {
                         folders[file.getPath()] = file;
                     }
                     files.addItem(file);
@@ -109,6 +110,9 @@ define(function(require, exports, module) {
             if(parentFolder) {
                 files.addItem(parentFolder);
             }
+
+            // Sort
+            files.sort(File.COMPARATOR);
 
             return files;
         };

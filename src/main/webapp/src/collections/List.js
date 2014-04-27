@@ -46,6 +46,21 @@ define(function(require, exports, module) {
             fireChange();
         };
 
+        self.copy = function(other) {
+            items = [];
+            other.each(function(item) {
+                self.addItem(item);
+            });
+            fireChange();
+        };
+
+        self.each = function(callback) {
+            for(var i = 0; i < self.getLength(); i++) {
+                var item = self.getItemAt(i);
+                callback(item);
+            }
+        };
+
         return self;
     };
 
