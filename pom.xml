@@ -68,9 +68,11 @@
                             <jsTestSrcDir>${project.basedir}src/main/webapp/src/spec</jsTestSrcDir>
                             <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
                             <debug>true</debug>
-                            <manualSpecRunnerHtmlFileName>${project.basedir}src/main/webapp/SpecRunner.html</manualSpecRunnerHtmlFileName>
                             <haltOnFailure>true</haltOnFailure>
-                            <specRunnerHtmlFileName>${project.basedir}src/main/webapp/SpecRunner.html</specRunnerHtmlFileName>
+                            <specRunnerTemplate>REQUIRE_JS</specRunnerTemplate>
+                            <preloadSources>
+                                <source>${project.basedir}/src/main/webapp/require.js</source>
+                            </preloadSources>
                         </configuration>
                     </execution>
                 </executions>
