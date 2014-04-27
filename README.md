@@ -55,6 +55,7 @@ Work Log
     * Tested various UI frameworks and templating engines
     * Created basic widget, binding, and event frameworks
     * Can now create folders in WebDav
+    * Can delete files in WebDav
 * 2014-04-20
     * Uploads working to plain-old-apache (with mod_dav)
     * Remove custom .NET project
