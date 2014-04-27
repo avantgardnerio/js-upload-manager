@@ -56,6 +56,7 @@ Work Log
     * Created basic widget, binding, and event frameworks
     * Can now create folders in WebDav
     * Can delete files in WebDav
+    * Refactored UploadManager to be subservient to WebDavBrowser
 * 2014-04-20
     * Uploads working to plain-old-apache (with mod_dav)
     * Remove custom .NET project
