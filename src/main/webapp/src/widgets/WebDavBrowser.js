@@ -93,6 +93,7 @@ define(function(require, exports, module) {
             if (item.getContentType() !== 'httpd/unix-directory') {
                 return;
             }
+            fileRenderer.setPath(item.getPath());
             client.navigate(item.getRelativePath());
         };
 
