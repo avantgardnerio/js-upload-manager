@@ -10,8 +10,9 @@
  */
 define(function(require, exports, module) {
 
+    var SelectionEvent = require('events/SelectionEvent');
+
     var RowRenderer = require('renderers/RowRenderer');
-    var SelectionEvent = require('events/SelectionEvent')
 
     var FileRenderer = function(colNames) {
 
@@ -43,14 +44,19 @@ define(function(require, exports, module) {
 
         // ----------------------------------------- Private methods --------------------------------------------------
         var createLink = function(text, item, cell, selectedItems) {
+            var link = $('<a/>');
+
             // Calculate path
             var path = text.substr(curentPath.length);
             var href = text;
             if (path === '') {
                 path = '.';
             }
-            if (item.contentType === 'httpd/unix-directory') {
-                href = 'javascript:alert("hi");';
+            if (item.getContentType() === 'httpd/unix-directory') {
+                href = '#path=' + item.getPath();
+                link.click(function() {
+                    self.dispatch(new SelectionEvent(item, true));
+                });
             }
             var selected = selectedItems.indexOf(item) >= 0;
 
@@ -65,7 +71,7 @@ define(function(require, exports, module) {
             cell.append(checkbox);
 
             // Link
-            var link = $('<a/>').attr('href', href).text(path);
+            link.attr('href', href).text(path);
             cell.append(link);
         };
 

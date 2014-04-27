@@ -11,6 +11,7 @@
 define(function(require, exports, module) {
 
     var ProgressEvent = require('events/ProgressEvent');
+    var SelectionEvent = require('events/SelectionEvent');
 
     var ResizeFilter = require('filters/ResizeFilter');
 
@@ -25,17 +26,17 @@ define(function(require, exports, module) {
     var ProgressBar = require('widgets/ProgressBar');
     var UploadStats = require('widgets/UploadStats');
 
-    var WebDavBrowser = function() {
+    var WebDavBrowser = function(rootPath) {
 
         var self = {};
 
         // ----------------------------------------- Private members --------------------------------------------------
         var columnNames = ['href','contentType','contentLength','creationDate','lastModified'];
-        var client = new WebDavClient('/webdav1/');
+        var client = new WebDavClient(rootPath);
         var fileRenderer = new FileRenderer(columnNames);
         var grid = new DataGrid(columnNames);
         var createFolder = new CreateFolder();
-        var manager = new UploadManager();
+        var manager = new UploadManager(rootPath);
         var stats = new UploadStats();
         var pbMain = new ProgressBar();
 
@@ -72,6 +73,7 @@ define(function(require, exports, module) {
                 var file = files[i];
                 manager.enqueue(file);
             }
+            manager.setPath(client.getCurrentPath());
             manager.upload();
         };
 
@@ -84,6 +86,14 @@ define(function(require, exports, module) {
             if(!state) {
                 client.update(); // File was completed
             }
+        };
+
+        var onSelect = function(ev) {
+            var item = ev.getItem();
+            if (item.getContentType() !== 'httpd/unix-directory') {
+                return;
+            }
+            client.navigate(item.getRelativePath());
         };
 
         // ------------------------------------------- Constructor ----------------------------------------------------
@@ -103,12 +113,13 @@ define(function(require, exports, module) {
 
             grid.setRenderer(fileRenderer);
             grid.setDataSource(client.getFiles());
+            grid.addEventListener(SelectionEvent.TYPE, onSelect);
 
             fileHolder.load('templates/WebDavBrowser.html', function() {
                 // Elements owned by this widget
                 fileHolder.find('.newFolder').click(showPopup);
                 fileHolder.find('.btnDelete').click(onDelete);
-                fileHolder.find('.fileSelect').change(onFileSelect)
+                fileHolder.find('.fileSelect').change(onFileSelect);
 
                 // Child widgets
                 fileHolder.find('.fileList').append(grid.getElement());

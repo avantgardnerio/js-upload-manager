@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         lastModified: 'getlastmodified'
     };
 
-    var File = function(response) {
+    var File = function(response, rootPath) {
 
         var self = {};
 
@@ -31,6 +31,10 @@ define(function(require, exports, module) {
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.getPath = function() {
             return self.getProp('href');
+        };
+
+        self.getRelativePath = function() {
+            return self.getPath().substr(rootPath.length);
         };
 
         self.getContentType = function() {

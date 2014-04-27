@@ -30,6 +30,11 @@ define(function(require, exports, module) {
             return files;
         };
 
+        self.navigate = function(url) {
+            path = url;
+            self.update();
+        };
+
         self.createFolder = function(filename) {
             $.ajax({
                 type: 'MKCOL',
@@ -83,7 +88,7 @@ define(function(require, exports, module) {
                 var status = xml.children[statusIndex];
                 for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
                     var response = status.children[responseIndex];
-                    var file = new File(response);
+                    var file = new File(response, rootPath);
                     files.addItem(file);
                 }
             }

@@ -11,12 +11,14 @@
 define(function(require, exports, module) {
 
     var ChangeEvent = require('events/ChangeEvent');
+    var EventDispatcher = require('events/EventDispatcher');
     var SelectionEvent = require('events/SelectionEvent');
+
     var RowRenderer = require('renderers/RowRenderer');
 
     var DataGrid = function(columnNames) {
 
-        var self = {};
+        var self = new EventDispatcher();
 
         // ----------------------------------------- Private members --------------------------------------------------
         var table = $('<table/>');
@@ -64,6 +66,7 @@ define(function(require, exports, module) {
                 }
             }
             render();
+            self.dispatch(ev);
         };
 
         var clear = function() {
