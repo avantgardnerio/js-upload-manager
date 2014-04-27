@@ -53,6 +53,10 @@ TODO:
 
 Work Log
 --------
+* 2014-04-27
+    * Added ability to list files with WebDAV
+    * Tested various UI frameworks and templating engines
+    * Created basic widget, binding, and event frameworks
 * 2014-04-20
     * Uploads working to plain-old-apache (with mod_dav)
     * Remove custom .NET project
