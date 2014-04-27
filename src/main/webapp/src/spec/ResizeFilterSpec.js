@@ -5,6 +5,7 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
+/*
 describe('ResizeFilter', function() {
 
     beforeEach(function() {
@@ -20,3 +21,4 @@ describe('ResizeFilter', function() {
     });
 
 });
+*/

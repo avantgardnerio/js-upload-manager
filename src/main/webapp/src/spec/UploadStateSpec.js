@@ -5,6 +5,7 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
+/*
 describe('UploadState', function() {
 
     var MIME_TYPE = 'application/octet-stream';
@@ -55,3 +56,4 @@ describe('UploadState', function() {
     });
 
 });
+*/
