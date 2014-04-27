@@ -10,7 +10,7 @@
  */
 define(function(require, exports, module) {
 
-    return function(type) {
+    var Event = function(type) {
 
         var self = {};
 
@@ -19,5 +19,7 @@ define(function(require, exports, module) {
         };
 
         return self;
-    }
+    };
+
+    return Event;
 });

@@ -25,7 +25,7 @@ define(function(require, exports, module) {
             var row = $('<tr/>');
             for(var i = 0; i < colNames.length; i++) {
                 var colName = colNames[i];
-                var text = item[colName];
+                var text = item.getProp(colName);
                 var cell = $('<td/>');
                 if(colName === 'href') {
                     createLink(text, item, cell, selectedItems);

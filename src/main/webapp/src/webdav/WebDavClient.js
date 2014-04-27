@@ -11,6 +11,7 @@
 define(function(require, exports, module) {
 
     var List = require('collections/List');
+    var File = require('webdav/File');
 
     var WebDavClient = function(rootPath) {
 
@@ -82,34 +83,11 @@ define(function(require, exports, module) {
                 var status = xml.children[statusIndex];
                 for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
                     var response = status.children[responseIndex];
-                    var propstat = response.getElementsByTagName('propstat')[0];
-                    var href = response.getElementsByTagName('href')[0].innerHTML;
-                    var props = response.getElementsByTagName('prop')[0];
-
-                    href = href.substr(path.length);
-                    var file = {
-                        href: path + href,
-                        contentType: getText(props, 'getcontenttype'),
-                        contentLength: getText(props, 'getcontentlength'),
-                        creationDate: getText(props, 'creationdate'),
-                        lastModified: getText(props, 'getlastmodified')
-                    };
+                    var file = new File(response);
                     files.addItem(file);
                 }
             }
             return files;
-        };
-
-        var getText = function(props, name) {
-            var val = props.getElementsByTagName(name);
-            if(!val) {
-                return '';
-            }
-            val = val[0];
-            if(!val) {
-                return '';
-            }
-            return val.innerHTML;
         };
 
         // ------------------------------------------- Constructor ----------------------------------------------------
