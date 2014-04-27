@@ -28,6 +28,7 @@ Setup
 
 TODO:
 -----
+* Sort the file/folder list by isFolder(), then filename
 * Dependency injection
     * Get require.js working with Jasmine
     * Use require.js map to inject dependencies to tests
@@ -57,6 +58,7 @@ Work Log
     * Can now create folders in WebDav
     * Can delete files in WebDav
     * Refactored UploadManager to be subservient to WebDavBrowser
+    * Can traverse up and down directory structure, and upload to current location
 * 2014-04-20
     * Uploads working to plain-old-apache (with mod_dav)
     * Remove custom .NET project
