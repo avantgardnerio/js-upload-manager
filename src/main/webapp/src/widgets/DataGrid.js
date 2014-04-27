@@ -10,6 +10,8 @@
  */
 define(function(require, exports, module) {
 
+    var RowRenderer = require('renderers/RowRenderer');
+
     var DataGrid = function(columnNames) {
 
         var self = {};
@@ -18,7 +20,7 @@ define(function(require, exports, module) {
         var table = $('<table/>');
         var header = $('<tr/>')
         var dataSource = {};
-        var columns = [];
+        var renderer = new RowRenderer(columnNames);
 
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.setDataSource = function(ds) {
@@ -41,27 +43,11 @@ define(function(require, exports, module) {
 
         var render = function() {
             clear();
-            for(var rowIndex = 0; rowIndex < dataSource.getLength(); rowIndex++) {
-                var item = dataSource.getItemAt(rowIndex);
-                var row = $('<tr/>');
-                for(var colIndex = 0; colIndex < columns.length; colIndex++) {
-                    var column = columns[colIndex];
-                    var val = item[column];
-                    if(colIndex == 0) {
-                        // TODO: Column types
-                        row.append($('<td/>').append($('<a/>').attr('href', val).text(val)));
-                    } else {
-                        addCell(row, val);
-                    }
-                }
-
+            for(var i = 0; i < dataSource.getLength(); i++) {
+                var item = dataSource.getItemAt(i);
+                var row = renderer.render(i, item);
                 table.append(row);
             }
-        };
-
-        var addCell = function(row, el) {
-            var text = el ? el.textContent : '';
-            row.append($('<td/>').html(text));
         };
 
         // ------------------------------------------- Constructor ----------------------------------------------------
@@ -71,7 +57,6 @@ define(function(require, exports, module) {
 
             for(var i = 0; i < columnNames.length; i++) {
                 var column = columnNames[i];
-                columns.push(column);
                 var th = $('<th/>').html(column);
                 header.append(th);
             }
