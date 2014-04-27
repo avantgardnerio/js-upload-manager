@@ -39,7 +39,6 @@ TODO:
     * Don't stomp on other things that might be in local storage
 * Stop repeatedly reloading from localStorage
     * Should cache things in memory to avoid continually base64 decoding
-
 * More and better tests
     * true unit tests
     * Verify file contents
@@ -47,8 +46,6 @@ TODO:
 * Prompting the user to increase local storage space if files are too large
 * Update events to reflect multi-file support
     * Update UI to handle new events
-* Use a real UI framework
-    * jQuery, Angular, etc
 
 
 Work Log
