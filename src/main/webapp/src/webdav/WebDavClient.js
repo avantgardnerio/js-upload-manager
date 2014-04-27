@@ -19,11 +19,16 @@ define(function(require, exports, module) {
 
         // ----------------------------------------- Private members --------------------------------------------------
         var path = '';
+        var folders = {};
         var files = new List();
 
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.getCurrentPath = function() {
             return rootPath + path;
+        };
+
+        self.getCurrentFile = function() {
+            return currentFile;
         };
 
         self.getFiles = function() {
@@ -84,15 +89,49 @@ define(function(require, exports, module) {
         // TODO: Better OO (return files - don't change state)
         var readXml = function(xml) {
             files.clear();
+
+            // Translate the XML into File objects
             for(var statusIndex = 0; statusIndex < xml.children.length; statusIndex++) {
                 var status = xml.children[statusIndex];
                 for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
                     var response = status.children[responseIndex];
                     var file = new File(response, rootPath);
+                    if(file.getContentType() === 'httpd/unix-directory') {
+                        folders[file.getPath()] = file;
+                    }
                     files.addItem(file);
                 }
             }
+
+            // Artificially add the parent folder
+            var parentPath = getParentPath(self.getCurrentPath());
+            var parentFolder = folders[parentPath];
+            if(parentFolder) {
+                files.addItem(parentFolder);
+            }
+
             return files;
+        };
+
+        // TODO: Utility class
+        var getParentPath = function(path) {
+            // Take off trailing slash
+            if(endsWith(path, '/')) {
+                path = path.substring(0, path.length-1);
+            }
+
+            // Truncate to last slash before it
+            var index = path.lastIndexOf('/');
+            path = path.substring(0, index);
+
+            // Add a slash turning it back into a directory
+            path += '/';
+            return path;
+        };
+
+        // TODO: Utility class
+        var endsWith = function(text, suffix) {
+            return text.indexOf(suffix, text.length - suffix.length) !== -1;
         };
 
         // ------------------------------------------- Constructor ----------------------------------------------------
