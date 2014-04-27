@@ -1,22 +1,18 @@
 require([
     'uploads/UploadManager',
     'filters/ResizeFilter',
-    'webdav/WebDavClient',
-    'widgets/DataGrid'
+    'widgets/WebDavBrowser'
 ], function(
     UploadManager,
     ResizeFilter,
-    WebDavClient,
-    DataGrid
+    WebDavBrowser
     ) {
 
     window.exports = window.exports || {};
 
     // Create a WebDav client and bind a DataGrid to it
-    var client = new WebDavClient('/webdav1/');
-    var grid = new DataGrid(['href','contentType','contentLength','creationDate','lastModified']);
-    grid.setDataSource(client.getFiles());
-    $('.fileList').append(grid.getElement());
+    var browser = new WebDavBrowser('/webdav1/');
+    $('.webDavBrowser').append(browser.getElement());
 
     var manager = new UploadManager();
     manager.addFilter(new ResizeFilter(Image, document));
