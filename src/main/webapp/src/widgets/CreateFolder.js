@@ -17,14 +17,17 @@ define(function(require, exports, module) {
 
         var self = new EventDispatcher();
 
+        // --------------------------------------- Private members ----------------------------------------------------
         var el = $('<div/>');
-        el.hide();
+        var tbFilename;
 
+        // --------------------------------------- Public methods -----------------------------------------------------
         self.getElement = function() {
             return el;
         };
 
         self.show = function() {
+            tbFilename.val('');
             el.show();
         };
 
@@ -32,18 +35,28 @@ define(function(require, exports, module) {
             el.hide();
         };
 
+        self.getText = function() {
+            return tbFilename.val();
+        };
+
+        // ----------------------------------------- Private methods --------------------------------------------------
         var onCancel = function() {
+            self.hide();
             self.dispatch(new Event('cancel'));
         };
 
         var onCreate = function() {
+            self.hide();
             self.dispatch(new Event('create'));
         };
 
+        // ---------------------------------------------- Constructor -------------------------------------------------
         var ctor = function() {
+            el.hide();
             el.load('templates/CreateFolder.html', function() {
                 el.find('.btnCancel').click(onCancel);
                 el.find('.btnCreate').click(onCreate);
+                tbFilename = el.find(':text');
             });
         };
 

@@ -14,40 +14,44 @@ define(function(require, exports, module) {
     var DataGrid = require('widgets/DataGrid');
     var CreateFolder = require('widgets/CreateFolder');
 
-    return function() {
+    var WebDavBrowser = function() {
 
         var self = {};
 
+        // ----------------------------------------- Private members --------------------------------------------------
+        var client = new WebDavClient('/webdav1/');
+        var grid = new DataGrid(['href','contentType','contentLength','creationDate','lastModified']);
         var createFolder = new CreateFolder();
-        createFolder.addEventListener('cancel', function() {
-            createFolder.hide();
-        });
-        createFolder.addEventListener('create', function() {
-            createFolder.hide();
-        });
-
         var el = $('<div/>');
-
         var popupHolder = $('<div/>');
-        el.append(popupHolder);
-        popupHolder.append(createFolder.getElement());
-
         var fileHolder = $('<div/>');
-        el.append(fileHolder);
 
+        // ----------------------------------------- Public methods ---------------------------------------------------
         self.getElement = function() {
             return el;
+        };
+
+        // ----------------------------------------- Private methods --------------------------------------------------
+        var onCreate = function() {
+            var filename = createFolder.getText();
         };
 
         var showPopup = function() {
             createFolder.show();
         };
 
+        // ------------------------------------------- Constructor ----------------------------------------------------
         var ctor = function() {
+            el.append(popupHolder);
+            el.append(fileHolder);
+
+            popupHolder.append(createFolder.getElement());
+
+            createFolder.addEventListener('create', onCreate);
+
+            grid.setDataSource(client.getFiles());
+
             fileHolder.load('templates/WebDavBrowser.html', function() {
-                var client = new WebDavClient('/webdav1/');
-                var grid = new DataGrid(['href','contentType','contentLength','creationDate','lastModified']);
-                grid.setDataSource(client.getFiles());
                 fileHolder.find('.fileList').append(grid.getElement());
                 fileHolder.find('.newFolder').click(showPopup);
             });
@@ -56,5 +60,7 @@ define(function(require, exports, module) {
         ctor();
 
         return self;
-    }
+    };
+
+    return WebDavBrowser;
 });
