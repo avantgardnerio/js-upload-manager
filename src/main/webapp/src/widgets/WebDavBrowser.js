@@ -46,7 +46,7 @@ define(function(require, exports, module) {
 
         var onDelete = function() {
             var items = grid.getSelectedItems();
-            for(var i = 0; i < items; i++) {
+            for(var i = 0; i < items.length; i++) {
                 var item = items[i];
                 client.delete(item);
             }

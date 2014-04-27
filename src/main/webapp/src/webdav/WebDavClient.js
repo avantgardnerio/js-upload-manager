@@ -41,10 +41,10 @@ define(function(require, exports, module) {
             });
         };
 
-        self.delete = function(filename) {
+        self.delete = function(file) {
             $.ajax({
                 type: 'DELETE',
-                url: self.getCurrentPath() + filename,
+                url: file.getPath(),
                 success: function() {
                     self.update();
                 }
