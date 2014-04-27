@@ -7,3 +7,35 @@
 {
     width: 100%;
 }
+
+.blanket
+{
+    background-color:#111;
+    opacity: 0.65;
+    *background:none;
+    position:absolute;
+    z-index: 9001;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.popUpDiv {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    line-height: 200px;
+    height: 200px;
+    margin-left: -150px;
+    margin-top: -100px;
+    background-color: #eeeeee;
+    text-align: center;
+    border-radius: 5px;
+
+    /* needed styles for the overlay */
+    z-index: 9002; /* keep on top of other elements on the page */
+    outline: 9999px solid rgba(0,0,0,0.5);
+}
+

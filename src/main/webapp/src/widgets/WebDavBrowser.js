@@ -18,17 +18,26 @@ define(function(require, exports, module) {
         var self = {};
 
         var el = $('<div/>');
+        var popupHolder = $('<div/>');
+        el.append(popupHolder);
+        var fileHolder = $('<div/>');
+        el.append(fileHolder);
 
         self.getElement = function() {
             return el;
         };
 
+        var showPopup = function() {
+            popupHolder.load('templates/CreateFolder.html');
+        };
+
         var ctor = function() {
-            el.load('templates/WebDavBrowser.html', function() {
+            fileHolder.load('templates/WebDavBrowser.html', function() {
                 var client = new WebDavClient('/webdav1/');
                 var grid = new DataGrid(['href','contentType','contentLength','creationDate','lastModified']);
                 grid.setDataSource(client.getFiles());
-                $('.fileList').append(grid.getElement());
+                fileHolder.find('.fileList').append(grid.getElement());
+                fileHolder.find('.newFolder').click(showPopup);
             });
         };
 
