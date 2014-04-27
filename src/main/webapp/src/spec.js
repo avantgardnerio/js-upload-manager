@@ -4,5 +4,5 @@ define([
     UploadManagerSpec
 ) {
     console.log('Loaded specs!');
-    jasmine.getEnv().execute();
+    window.bootJasmine();
 });

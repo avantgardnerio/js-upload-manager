@@ -7,7 +7,7 @@
  */
 define([
         'lib/Base64'
-    ], function(
+    ], function defineResources(
         Base64
     ) {
 

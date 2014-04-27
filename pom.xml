@@ -65,7 +65,7 @@
                         <configuration>
                             <keepServerAlive>true</keepServerAlive>
                             <jsSrcDir>${project.basedir}/src/main/webapp/src</jsSrcDir>
-                            <jsTestSrcDir>src/main/webapp/src/spec</jsTestSrcDir>
+                            <jsTestSrcDir>${project.basedir}src/main/webapp/src/spec</jsTestSrcDir>
                             <webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
                         </configuration>
                     </execution>
