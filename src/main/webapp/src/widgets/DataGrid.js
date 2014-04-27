@@ -65,20 +65,25 @@ define(function(require, exports, module) {
                     selectedItems.splice(index, 1);
                 }
             }
-            render();
+            invalidate();
             self.dispatch(ev);
         };
 
         var clear = function() {
             table.find('tr').each(function(i, tr) {
-                if(i > 0) {
-                    tr.remove();
-                }
+                tr.remove();
             });
         };
 
-        var render = function() {
-            clear();
+        var addHeaders = function() {
+            for(var i = 0; i < columnNames.length; i++) {
+                var column = columnNames[i];
+                var th = $('<th/>').html(column);
+                header.append(th);
+            }
+        };
+
+        var addRecords = function() {
             for(var i = 0; i < dataSource.getLength(); i++) {
                 var item = dataSource.getItemAt(i);
                 var row = renderer.render(i, item, selectedItems);
@@ -86,16 +91,21 @@ define(function(require, exports, module) {
             }
         };
 
+        var render = function() {
+            clear();
+            addHeaders();
+            addRecords();
+        };
+
+        var invalidate = function() {
+            window.requestAnimationFrame(render);
+        };
+
         // ------------------------------------------- Constructor ----------------------------------------------------
         var ctor = function() {
             table.append(header);
             table.addClass('dataGrid');
-
-            for(var i = 0; i < columnNames.length; i++) {
-                var column = columnNames[i];
-                var th = $('<th/>').html(column);
-                header.append(th);
-            }
+            invalidate();
         };
 
         ctor();

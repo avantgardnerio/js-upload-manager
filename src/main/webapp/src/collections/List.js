@@ -41,6 +41,11 @@ define(function(require, exports, module) {
             return items[index];
         };
 
+        self.sort = function(comparator) {
+            items.sort(comparator);
+            fireChange();
+        };
+
         return self;
     };
 
