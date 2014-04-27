@@ -11,7 +11,12 @@
 define(function(require, exports, module) {
 
     var List = require('collections/List');
+
+    var ArrayUtil = require('utils/ArrayUtil');
+
     var File = require('webdav/File');
+
+    var PathUtil = require('utils/PathUtil');
 
     var WebDavClient = function(rootPath) {
 
@@ -87,25 +92,22 @@ define(function(require, exports, module) {
 
         // ----------------------------------------- Private methods --------------------------------------------------
 
-        // TODO: Better OO (return files - don't change state)
         var readXml = function(xml) {
             var files = new List();
 
             // Translate the XML into File objects
-            for(var statusIndex = 0; statusIndex < xml.children.length; statusIndex++) {
-                var status = xml.children[statusIndex];
-                for(var responseIndex = 0; responseIndex < status.children.length; responseIndex++) {
-                    var response = status.children[responseIndex];
+            ArrayUtil.each(xml.children, function(status) {
+                ArrayUtil.each(status.children, function(response) {
                     var file = new File(response, rootPath);
                     if(file.getContentType() === File.TYPE.DIRECTORY) {
                         folders[file.getPath()] = file;
                     }
                     files.addItem(file);
-                }
-            }
+                });
+            });
 
             // Artificially add the parent folder
-            var parentPath = getParentPath(self.getCurrentPath());
+            var parentPath = PathUtil.getParentPath(self.getCurrentPath());
             var parentFolder = folders[parentPath];
             if(parentFolder) {
                 files.addItem(parentFolder);
@@ -115,27 +117,6 @@ define(function(require, exports, module) {
             files.sort(File.COMPARATOR);
 
             return files;
-        };
-
-        // TODO: Utility class
-        var getParentPath = function(path) {
-            // Take off trailing slash
-            if(endsWith(path, '/')) {
-                path = path.substring(0, path.length-1);
-            }
-
-            // Truncate to last slash before it
-            var index = path.lastIndexOf('/');
-            path = path.substring(0, index);
-
-            // Add a slash turning it back into a directory
-            path += '/';
-            return path;
-        };
-
-        // TODO: Utility class
-        var endsWith = function(text, suffix) {
-            return text.indexOf(suffix, text.length - suffix.length) !== -1;
         };
 
         // ------------------------------------------- Constructor ----------------------------------------------------

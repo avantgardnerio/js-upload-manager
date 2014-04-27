@@ -13,6 +13,8 @@ define(function(require, exports, module) {
     var ChangeEvent = require('events/ChangeEvent');
     var EventDispatcher = require('events/EventDispatcher');
 
+    var ArrayUtil = require('utils/ArrayUtil');
+
     var List = function() {
 
         var self = new EventDispatcher();
@@ -55,10 +57,7 @@ define(function(require, exports, module) {
         };
 
         self.each = function(callback) {
-            for(var i = 0; i < self.getLength(); i++) {
-                var item = self.getItemAt(i);
-                callback(item);
-            }
+            ArrayUtil.each(items, callback);
         };
 
         return self;
