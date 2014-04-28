@@ -1,8 +1,7 @@
 define([
-    'spec/UploadManagerSpec'
-], function(
-    UploadManagerSpec
-) {
+    'spec/UploadManagerSpec',
+    'spec/ResizeFilterSpec'
+], function () {
     console.log('Loaded specs!');
     window.bootJasmine();
 });

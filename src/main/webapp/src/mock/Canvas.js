@@ -5,35 +5,39 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
-var CanvasMock = function() {
-    var TARGET_FORMAT = 'image/jpeg';
-    var URL_PREFIX = 'data:' + TARGET_FORMAT + ';base64,';
+define(
+    [
+        'lib/Base64'
+    ],
+    function (Base64) {
 
-    var self = {};
+        var Canvas = {};
 
-    self.createElement = function(type) {
-        if(type === 'canvas') {
+        var TARGET_FORMAT = 'image/jpeg';
+        var URL_PREFIX = 'data:' + TARGET_FORMAT + ';base64,';
+
+        Canvas.create = function () {
             var cnv = {};
 
             var data = null;
 
-            cnv.getContext = function() {
+            cnv.getContext = function () {
                 var ctx = {};
 
-                ctx.drawImage = function(img) {
+                ctx.drawImage = function (img) {
                     data = img;
                 };
 
                 return ctx;
             };
 
-            cnv.toDataURL = function() {
+            cnv.toDataURL = function () {
                 return URL_PREFIX + Base64.encode(data); // Don't bother resizing for test
             };
 
             return cnv;
-        }
-    };
+        };
 
-    return self;
-};
+        return Canvas;
+    }
+);

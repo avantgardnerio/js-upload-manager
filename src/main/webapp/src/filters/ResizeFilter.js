@@ -8,8 +8,10 @@
 define(function(require, exports, module) {
 
     var Base64 = require('lib/Base64');
+    var Image = require('real/Image');
+    var Canvas = require('real/Canvas');
 
-    return function(Image, document) {
+    var ResizeFilter = function() {
         var self = {};
 
         // Graphics constants
@@ -23,7 +25,7 @@ define(function(require, exports, module) {
             var b64imgData = Base64.encode(data);
             var img = new Image();
             img.addEventListener('load', function () {
-                var canvas = document.createElement('canvas');
+                var canvas = Canvas.create();
 
                 // Calculate new size
                 var xRatio = TARGET_WIDTH / this.width;
@@ -55,5 +57,7 @@ define(function(require, exports, module) {
         };
 
         return self;
-    }
+    };
+
+    return ResizeFilter;
 });

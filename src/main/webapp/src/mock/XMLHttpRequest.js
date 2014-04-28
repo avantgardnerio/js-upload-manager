@@ -9,10 +9,7 @@ define([
         'events/Event',
         'events/EventDispatcher'
     ],
-    function (
-        Event,
-        EventDispatcher
-        ) {
+    function (Event, EventDispatcher) {
 
         var XMLHttpRequestMock = function () {
 
