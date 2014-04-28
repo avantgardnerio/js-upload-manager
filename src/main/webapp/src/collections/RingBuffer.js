@@ -6,7 +6,10 @@
  * Licensed under the MIT license.
  */
 define(function(require, exports, module) {
-    return function(size) {
+
+    var ArrayUtil = require('utils/ArrayUtil');
+
+    var RingBuffer = function(size) {
         var self = {};
 
         var ar = [];
@@ -20,12 +23,14 @@ define(function(require, exports, module) {
 
         self.average = function () {
             var count = 0;
-            for (var i = 0; i < ar.length; i++) {
-                count += ar[i];
-            }
+            ArrayUtil.each(ar, function(item) {
+                count += item;
+            });
             return Math.round(count / ar.length);
         };
 
         return self;
-    }
+    };
+
+    return RingBuffer;
 });
