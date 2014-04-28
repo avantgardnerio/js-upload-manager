@@ -67,7 +67,8 @@ define(function(require, exports, module) {
         };
 
         self.getRelativePath = function() {
-            return self.getPath().substr(rootPath.length);
+            var path = self.getPath();
+            return path.substr(rootPath.length);
         };
 
         self.getContentType = function() {
