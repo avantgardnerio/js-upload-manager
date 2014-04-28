@@ -2,6 +2,7 @@ define([
     'spec/ChangeEventSpec',
     'spec/EventSpec',
     'spec/EventDispatcherSpec',
+    'spec/ProgressEventSpec',
     'spec/SelectionEventSpec',
     'spec/ListSpec',
     'spec/ResizeFilterSpec',
