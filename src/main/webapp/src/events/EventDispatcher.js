@@ -10,7 +10,7 @@
  */
 define(function(require, exports, module) {
 
-    return function() {
+    var EventDispatcher = function() {
 
         var self = {};
 
@@ -57,5 +57,7 @@ define(function(require, exports, module) {
         };
 
         return self;
-    }
+    };
+
+    return EventDispatcher;
 });
