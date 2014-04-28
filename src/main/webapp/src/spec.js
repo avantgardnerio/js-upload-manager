@@ -1,4 +1,5 @@
 define([
+    'spec/ListSpec',
     'spec/ResizeFilterSpec',
     'spec/UploadManagerSpec',
     'spec/UploadStateSpec'
