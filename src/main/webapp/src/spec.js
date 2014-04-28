@@ -2,6 +2,7 @@ define([
     'spec/ChangeEventSpec',
     'spec/EventSpec',
     'spec/EventDispatcherSpec',
+    'spec/FileRendererSpec',
     'spec/ProgressEventSpec',
     'spec/SelectionEventSpec',
     'spec/ListSpec',

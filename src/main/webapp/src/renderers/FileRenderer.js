@@ -16,6 +16,8 @@ define(function (require, exports, module) {
 
     var File = require('webdav/File');
 
+    var ArrayUtil = require('utils/ArrayUtil');
+
     var FileRenderer = function (colNames) {
 
         var self = new RowRenderer(colNames);
@@ -26,8 +28,7 @@ define(function (require, exports, module) {
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.render = function (index, item, selectedItems) {
             var row = $('<tr/>');
-            for (var i = 0; i < colNames.length; i++) {
-                var colName = colNames[i];
+            ArrayUtil.each(colNames, function(colName) {
                 var text = item.getProp(colName);
                 var cell = $('<td/>');
                 if (colName === 'href') {
@@ -36,7 +37,7 @@ define(function (require, exports, module) {
                     cell.html(text);
                 }
                 row.append(cell);
-            }
+            });
             return row;
         };
 
