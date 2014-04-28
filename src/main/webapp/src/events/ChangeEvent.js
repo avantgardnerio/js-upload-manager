@@ -18,10 +18,6 @@ define(function(require, exports, module) {
 
         var self = new Event(TYPE);
 
-        self.getItem = function() {
-            return item;
-        };
-
         return self;
     };
 

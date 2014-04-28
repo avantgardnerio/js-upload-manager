@@ -1,4 +1,5 @@
 define([
+    'spec/ChangeEventSpec',
     'spec/ListSpec',
     'spec/ResizeFilterSpec',
     'spec/RingBufferSpec',
