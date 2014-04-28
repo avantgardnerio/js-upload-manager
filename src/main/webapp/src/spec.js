@@ -7,6 +7,7 @@ define([
     'spec/ProgressEventSpec',
     'spec/SelectionEventSpec',
     'spec/ListSpec',
+    'spec/PathUtilSpec',
     'spec/DefaultFilterSpec',
     'spec/ResizeFilterSpec',
     'spec/RingBufferSpec',

@@ -12,8 +12,7 @@ define(function (require, exports, module) {
 
     var StringUtil = require('utils/StringUtil');
 
-    var PathUtil = function () {
-    };
+    var PathUtil = {};
 
     PathUtil.getParentPath = function (path) {
         // Take off trailing slash
