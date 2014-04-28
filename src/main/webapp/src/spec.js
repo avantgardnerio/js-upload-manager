@@ -1,6 +1,7 @@
 define([
+    'spec/ResizeFilterSpec',
     'spec/UploadManagerSpec',
-    'spec/ResizeFilterSpec'
+    'spec/UploadStateSpec'
 ], function () {
     console.log('Loaded specs!');
     window.bootJasmine();
