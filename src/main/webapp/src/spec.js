@@ -3,6 +3,7 @@ define([
     'spec/EventSpec',
     'spec/EventDispatcherSpec',
     'spec/FileRendererSpec',
+    'spec/RowRendererSpec',
     'spec/ProgressEventSpec',
     'spec/SelectionEventSpec',
     'spec/ListSpec',
