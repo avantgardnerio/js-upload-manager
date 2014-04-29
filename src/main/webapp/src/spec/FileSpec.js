@@ -6,8 +6,9 @@
  * Licensed under the MIT license.
  */
 define([
-    'webdav/File'
-], function (File) {
+    'webdav/File',
+    'mock/WebFile'
+], function (File, WebFile) {
     describe('File', function () {
 
         var MAP = {
@@ -19,16 +20,22 @@ define([
 
         it('should get properties from XML', function () {
             var response = {
-                getElementsByTagName: function(prop) {
-                    if(prop === 'href') {
-                        return [{innerHTML: '/webdav1/test/'}];
+                getElementsByTagName: function (prop) {
+                    if (prop === 'href') {
+                        return [
+                            {innerHTML: '/webdav1/test/'}
+                        ];
                     }
-                    if(prop === 'prop') {
-                        return [{
-                            getElementsByTagName: function(prop) {
-                                return [{innerHTML: MAP[prop]}];
+                    if (prop === 'prop') {
+                        return [
+                            {
+                                getElementsByTagName: function (prop) {
+                                    return [
+                                        {innerHTML: MAP[prop]}
+                                    ];
+                                }
                             }
-                        }];
+                        ];
                     }
                 }
             };
@@ -42,6 +49,22 @@ define([
             expect(file.getContentLength()).toEqual('3');
             expect(file.getCreationDate()).toEqual('4');
             expect(file.getLastModified()).toEqual('5');
+        });
+
+        it('should compare properly', function () {
+            var files = [
+                new WebFile('z', 'd'),
+                new WebFile('z', 'c'),
+                new WebFile('a', 'b'),
+                null
+            ];
+
+            files.sort(File.COMPARATOR);
+
+            expect(files[0]).toBeNull();
+            expect(files[1].getContentType()).toEqual('a');
+            expect(files[2].getRelativePath()).toEqual('c');
+            expect(files[3].getRelativePath()).toEqual('d');
         });
 
     });
