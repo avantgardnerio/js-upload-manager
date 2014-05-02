@@ -9,6 +9,12 @@ define(function (require, exports, module) {
 
     var $ = require('jquery');
 
+    var mockResponse;
+
+    $.setResponse = function(response) {
+        mockResponse = response;
+    };
+
     $.ajax = function (args) {
         var xhr = {};
         xhr.setRequestHeader = function (key, val) {
@@ -17,28 +23,7 @@ define(function (require, exports, module) {
 
         args.beforeSend(xhr);
 
-        var xml = {
-            children: [
-                {
-                    children: [
-                        {
-                            getElementsByTagName: function (key) {
-                                return [
-                                    {
-                                        getElementsByTagName: function (key) {
-                                            return {
-                                                getcontenttype: 'httpd/unix-directory'
-                                            }[key];
-                                        }
-                                    }
-                                ];
-                            }
-                        }
-                    ]
-                }
-            ]
-        };
-        args.success(xml);
+        args.success(mockResponse);
     };
 
     return $;
