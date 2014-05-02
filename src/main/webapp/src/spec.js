@@ -24,7 +24,8 @@ define([
     'spec/RingBufferSpec',
     'spec/UploadManagerSpec',
     'spec/UploadStateSpec',
-    'spec/WebDavClientSpec'
+    'spec/WebDavClientSpec',
+    'spec/DataGridSpec'
 ], function () {
     console.log('Loaded specs!');
     window.bootJasmine();

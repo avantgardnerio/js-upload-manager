@@ -22,7 +22,7 @@ define(function(require, exports, module) {
 
         // ----------------------------------------- Private members --------------------------------------------------
         var table = $('<table/>');
-        var header = $('<tr/>')
+        var header = $('<th/>')
         var dataSource = null;
         var selectedItems = [];
         var renderer = new RowRenderer(columnNames);
