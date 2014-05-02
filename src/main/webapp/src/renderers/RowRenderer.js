@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
     var EventDispatcher = require('events/EventDispatcher');
 
-    var $ = require('jquery');
+    var $ = require('real/jquery');
 
     var RowRenderer = function(colNames) {
 

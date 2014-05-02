@@ -18,6 +18,8 @@ define(function(require, exports, module) {
 
     var PathUtil = require('utils/PathUtil');
 
+    var $ = require('real/jquery');
+
     var WebDavClient = function(rootPath) {
 
         var self = {};
