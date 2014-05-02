@@ -23,7 +23,8 @@ define([
     'spec/ResizeFilterSpec',
     'spec/RingBufferSpec',
     'spec/UploadManagerSpec',
-    'spec/UploadStateSpec'
+    'spec/UploadStateSpec',
+    'spec/WebDavClientSpec'
 ], function () {
     console.log('Loaded specs!');
     window.bootJasmine();
