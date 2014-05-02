@@ -1,3 +1,8 @@
+require.config({
+    paths: {
+        jquery: 'lib/jquery'
+    }
+});
 require([
     'widgets/WebDavBrowser'
 ], function (WebDavBrowser) {

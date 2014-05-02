@@ -5,13 +5,6 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
-require.config({
-    map: {
-        '*': {
-            'real': 'mock'
-        }
-    }
-});
 define([
     'events/ProgressEvent',
     'mock/FileMock',

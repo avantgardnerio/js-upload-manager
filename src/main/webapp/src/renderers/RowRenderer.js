@@ -12,6 +12,8 @@ define(function(require, exports, module) {
 
     var EventDispatcher = require('events/EventDispatcher');
 
+    var $ = require('jquery');
+
     var RowRenderer = function(colNames) {
 
         var self = new EventDispatcher();

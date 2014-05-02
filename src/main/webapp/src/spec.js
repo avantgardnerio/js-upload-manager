@@ -1,3 +1,13 @@
+require.config({
+    map: {
+        '*': {
+            'real': 'mock'
+        }
+    },
+    paths: {
+        jquery: 'lib/jquery'
+    }
+});
 define([
     'spec/ChangeEventSpec',
     'spec/EventSpec',

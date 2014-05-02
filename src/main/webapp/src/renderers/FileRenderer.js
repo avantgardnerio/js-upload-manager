@@ -18,6 +18,8 @@ define(function (require, exports, module) {
 
     var ArrayUtil = require('utils/ArrayUtil');
 
+    var $ = require('jquery');
+
     var FileRenderer = function (colNames) {
 
         var self = new RowRenderer(colNames);
