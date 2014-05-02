@@ -5,22 +5,38 @@
  * Copyright (c) 2014 Brent Gardner
  * Licensed under the MIT license.
  */
-define(function(require, exports, module) {
+define(function (require, exports, module) {
 
     var $ = require('jquery');
 
-    $.ajax = function(args) {
+    $.ajax = function (args) {
         var xhr = {};
-        xhr.setRequestHeader = function(key, val) {
+        xhr.setRequestHeader = function (key, val) {
 
         };
 
         args.beforeSend(xhr);
 
         var xml = {
-            children: {
-                length: 0
-            }
+            children: [
+                {
+                    children: [
+                        {
+                            getElementsByTagName: function (key) {
+                                return [
+                                    {
+                                        getElementsByTagName: function (key) {
+                                            return {
+                                                getcontenttype: 'httpd/unix-directory'
+                                            }[key];
+                                        }
+                                    }
+                                ];
+                            }
+                        }
+                    ]
+                }
+            ]
         };
         args.success(xml);
     };
