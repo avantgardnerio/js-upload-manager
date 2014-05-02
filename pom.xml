@@ -71,8 +71,8 @@
                             <haltOnFailure>true</haltOnFailure>
                             <specRunnerTemplate>REQUIRE_JS</specRunnerTemplate>
                             <preloadSources>
-                                <source>${project.basedir}/src/main/webapp/src/lib/jquery-1.11.0.js</source>
-                                <source>${project.basedir}/src/main/webapp/src/require.js</source>
+                                <source>${project.basedir}/src/main/webapp/src/lib/require.js</source>
+                                <source>${project.basedir}/src/main/webapp/src/mock.js</source>
                             </preloadSources>
                         </configuration>
                     </execution>
