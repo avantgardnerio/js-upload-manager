@@ -98,14 +98,12 @@ define(function(require, exports, module) {
             var files = new List();
 
             // Translate the XML into File objects
-            ArrayUtil.each(xml.children, function(status) {
-                ArrayUtil.each(status.children, function(response) {
-                    var file = new File(response, rootPath);
-                    if(file.getContentType() === File.TYPE.DIRECTORY) {
-                        folders[file.getPath()] = file;
-                    }
-                    files.addItem(file);
-                });
+            $(xml).find('D\\:response').each(function(index, response) {
+                var file = new File(response, rootPath);
+                if(file.getContentType() === File.TYPE.DIRECTORY) {
+                    folders[file.getPath()] = file;
+                }
+                files.addItem(file);
             });
 
             // Artificially add the parent folder

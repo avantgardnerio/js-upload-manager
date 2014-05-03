@@ -14,11 +14,11 @@ define(function(require, exports, module) {
      * Create sane namings for otherwise incomprehensible WebDAV fields
      */
     var NAME_MAP = {
-        href: 'href',
-        contentType: 'getcontenttype',
-        contentLength: 'getcontentlength',
-        creationDate: 'creationdate',
-        lastModified: 'getlastmodified'
+        href: 'D\\:href',
+        contentType: 'D\\:getcontenttype',
+        contentLength: 'lp1\\:getcontentlength',
+        creationDate: 'lp1\\:creationdate',
+        lastModified: 'lp1\\:getlastmodified'
     };
 
     var TYPE = {
@@ -59,7 +59,22 @@ define(function(require, exports, module) {
         var self = {};
 
         // ----------------------------------------- Private members --------------------------------------------------
-        var props = response.getElementsByTagName('prop')[0];
+        var props;
+
+        // ------------------------------------------- Constructor ----------------------------------------------------
+        var ctor = function() {
+            if(response === undefined) {
+                throw new Error('Invalid response!');
+            }
+            var list = $(response).find('D\\:prop');
+            if(list === undefined || list.length === undefined || list.length <= 0) {
+                throw new Error('Invalid response!');
+            }
+            props = list[0];
+            if(props === undefined) {
+                throw new Error('Invalid XML!');
+            }
+        };
 
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.getPath = function() {
@@ -98,7 +113,7 @@ define(function(require, exports, module) {
         // ----------------------------------------- Private methods --------------------------------------------------
         var getText = function(props, name) {
             var key = NAME_MAP[name];
-            var val = props.getElementsByTagName(key);
+            var val = $(props).find(key);
             if(!val) {
                 return '';
             }
@@ -108,6 +123,8 @@ define(function(require, exports, module) {
             }
             return val.innerHTML;
         };
+
+        ctor();
 
         return self;
     };
