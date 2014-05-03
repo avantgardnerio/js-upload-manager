@@ -98,7 +98,7 @@ define(function(require, exports, module) {
             var files = new List();
 
             // Translate the XML into File objects
-            $(xml).find('D\\:response').each(function(index, response) {
+            $(xml.documentElement).children('D\\:response').each(function(index, response) {
                 var file = new File(response, rootPath);
                 if(file.getContentType() === File.TYPE.DIRECTORY) {
                     folders[file.getPath()] = file;

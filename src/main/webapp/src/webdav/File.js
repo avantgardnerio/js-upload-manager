@@ -63,17 +63,8 @@ define(function(require, exports, module) {
 
         // ------------------------------------------- Constructor ----------------------------------------------------
         var ctor = function() {
-            if(response === undefined) {
-                throw new Error('Invalid response!');
-            }
-            var list = $(response).find('D\\:prop');
-            if(list === undefined || list.length === undefined || list.length <= 0) {
-                throw new Error('Invalid response!');
-            }
-            props = list[0];
-            if(props === undefined) {
-                throw new Error('Invalid XML!');
-            }
+            var propstat = $(response).children('D\\:propstat')[0];
+            props = $(propstat).children('D\\:prop');
         };
 
         // ----------------------------------------- Public methods ---------------------------------------------------
@@ -113,7 +104,7 @@ define(function(require, exports, module) {
         // ----------------------------------------- Private methods --------------------------------------------------
         var getText = function(props, name) {
             var key = NAME_MAP[name];
-            var val = $(props).find(key);
+            var val = $(props).children(key);
             if(!val) {
                 return '';
             }
