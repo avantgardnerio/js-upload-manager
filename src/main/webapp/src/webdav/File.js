@@ -112,7 +112,7 @@ define(function(require, exports, module) {
             if(!val) {
                 return '';
             }
-            return val.innerHTML;
+            return $(val).text();
         };
 
         ctor();
