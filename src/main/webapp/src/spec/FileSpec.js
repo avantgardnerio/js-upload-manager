@@ -11,34 +11,25 @@ define([
 ], function (File, WebFile) {
     describe('File', function () {
 
-        var MAP = {
-            getcontenttype: '2',
-            getcontentlength: '3',
-            creationdate: '4',
-            getlastmodified: '5'
-        };
-
         it('should get properties from XML', function () {
-            var response = {
-                getElementsByTagName: function (prop) {
-                    if (prop === 'href') {
-                        return [
-                            {innerHTML: '/webdav1/test/'}
-                        ];
-                    }
-                    if (prop === 'prop') {
-                        return [
-                            {
-                                getElementsByTagName: function (prop) {
-                                    return [
-                                        {innerHTML: MAP[prop]}
-                                    ];
-                                }
-                            }
-                        ];
-                    }
-                }
-            };
+            var text = '\
+<?xml version="1.0" encoding="UTF-8"?>\
+<D:multistatus xmlns:D="DAV:" xmlns:ns0="DAV:">\
+	<D:response xmlns:lp1="DAV:" xmlns:lp2="http://apache.org/dav/props/">\
+		<D:href>/webdav1/test/</D:href>\
+		<D:propstat>\
+			<D:prop>\
+				<lp1:creationdate>4</lp1:creationdate>\
+				<lp1:getlastmodified>5</lp1:getlastmodified>\
+				<D:getcontenttype>2</D:getcontenttype>\
+				<lp1:getcontentlength>3</lp1:getcontentlength>\
+			</D:prop>\
+			<D:status>HTTP/1.1 200 OK</D:status>\
+		</D:propstat>\
+	</D:response>\
+</D:multistatus>\
+            ';
+            var response = $(text);
             var rootPath = '/webdav1/';
 
             var file = new File(response, rootPath);
