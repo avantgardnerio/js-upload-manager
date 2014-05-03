@@ -16,6 +16,8 @@ define(function(require, exports, module) {
 
     var RowRenderer = require('renderers/RowRenderer');
 
+    var Animator = require('real/Animator');
+
     var DataGrid = function(columnNames) {
 
         var self = new EventDispatcher();
@@ -84,6 +86,9 @@ define(function(require, exports, module) {
         };
 
         var addRecords = function() {
+            if(dataSource === null) {
+                return;
+            }
             for(var i = 0; i < dataSource.getLength(); i++) {
                 var item = dataSource.getItemAt(i);
                 var row = renderer.render(i, item, selectedItems);
@@ -98,7 +103,7 @@ define(function(require, exports, module) {
         };
 
         var invalidate = function() {
-            window.requestAnimationFrame(render);
+            Animator.requestAnimationFrame(render);
         };
 
         // ------------------------------------------- Constructor ----------------------------------------------------
