@@ -35,7 +35,7 @@ define(function(require, exports, module) {
                 dataSource.removeEventListener(ChangeEvent.TYPE, render);
             }
             dataSource = val;
-            dataSource.addEventListener(ChangeEvent.TYPE, render);
+            dataSource.addEventListener(ChangeEvent.TYPE, dataChange);
         };
 
         self.setRenderer = function(val) {
@@ -55,6 +55,11 @@ define(function(require, exports, module) {
         };
 
         // ----------------------------------------- Private methods --------------------------------------------------
+        var dataChange = function(ev) {
+            selectedItems = [];
+            render();
+        };
+
         var onSelect = function(ev) {
             var item = ev.getItem();
             if(ev.getSelected()) {
