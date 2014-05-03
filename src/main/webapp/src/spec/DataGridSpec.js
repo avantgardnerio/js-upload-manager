@@ -31,11 +31,20 @@ define(function (require, exports, module) {
             grid.setDataSource(list);
 
             var table = grid.getElement();
-            expect(table.find('tr').size()).toEqual(0);
+            expect(table.find('tr').size()).toEqual(1);
 
             list.addItem({});
 
-            expect(table.find('tr').size()).toEqual(1);
+            expect(table.find('tr').size()).toEqual(2);
+        });
+
+        it('should render headers only once', function () {
+            var grid = new DataGrid(['foo']);
+            var table = grid.getElement();
+
+            expect(table.find('th').size()).toEqual(1);
+            grid.setDataSource(new List());
+            expect(table.find('th').size()).toEqual(1);
         });
 
         it('should lose selection on change', function () {

@@ -24,10 +24,18 @@ define(function(require, exports, module) {
 
         // ----------------------------------------- Private members --------------------------------------------------
         var table = $('<table/>');
-        var header = $('<th/>')
+        var header = $('<tr/>')
         var dataSource = null;
         var selectedItems = [];
         var renderer = new RowRenderer(columnNames);
+
+        // ------------------------------------------- Constructor ----------------------------------------------------
+        var ctor = function() {
+            table.append(header);
+            table.addClass('dataGrid');
+            addHeaders();
+            invalidate();
+        };
 
         // ----------------------------------------- Public methods ---------------------------------------------------
         self.setDataSource = function(val) {
@@ -36,6 +44,7 @@ define(function(require, exports, module) {
             }
             dataSource = val;
             dataSource.addEventListener(ChangeEvent.TYPE, dataChange);
+            dataChange();
         };
 
         self.setRenderer = function(val) {
@@ -55,7 +64,7 @@ define(function(require, exports, module) {
         };
 
         // ----------------------------------------- Private methods --------------------------------------------------
-        var dataChange = function(ev) {
+        var dataChange = function() {
             selectedItems = [];
             render();
         };
@@ -78,6 +87,9 @@ define(function(require, exports, module) {
 
         var clear = function() {
             table.find('tr').each(function(i, tr) {
+                if(i == 0) {
+                    return;
+                }
                 tr.remove();
             });
         };
@@ -103,19 +115,11 @@ define(function(require, exports, module) {
 
         var render = function() {
             clear();
-            addHeaders();
             addRecords();
         };
 
         var invalidate = function() {
             Animator.requestAnimationFrame(render);
-        };
-
-        // ------------------------------------------- Constructor ----------------------------------------------------
-        var ctor = function() {
-            table.append(header);
-            table.addClass('dataGrid');
-            invalidate();
         };
 
         ctor();
