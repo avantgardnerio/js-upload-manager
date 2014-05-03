@@ -90,7 +90,7 @@ define(function(require, exports, module) {
                 if(i == 0) {
                     return;
                 }
-                tr.remove();
+                $(tr).remove();
             });
         };
 

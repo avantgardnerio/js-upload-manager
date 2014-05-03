@@ -98,9 +98,8 @@
                     <outputDir>${project.build.directory}/coverage</outputDir>
                     <noInstrumentPatterns>
                         <pattern>.*/spec/.*</pattern>
-                        <!-- Don't instrument specs -->
+                        <pattern>.*/mock/.*</pattern>
                         <pattern>.*/lib/.*</pattern>
-                        <!-- Don't instrument libs -->
                     </noInstrumentPatterns>
                 </configuration>
             </plugin>

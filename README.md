@@ -28,19 +28,19 @@ Setup
 
 TODO:
 -----
-* Dependency injection
-    * Get require.js working with Jasmine
-    * Use require.js map to inject dependencies to tests
 * More refactoring
     * FIFO functionality should be extracted out into LocalStorageQueue.js
+* Stop repeatedly reloading from localStorage
+    * Should cache things in memory to avoid continually base64 decoding
 * More robust keys for local storage
     * Switch away from plain-old-ints
     * Play better with other libraries
     * Don't stomp on other things that might be in local storage
-* Stop repeatedly reloading from localStorage
-    * Should cache things in memory to avoid continually base64 decoding
 * More and better tests
-    * true unit tests
+    * ProgressBar
+    * CreateFolder
+    * UploadStats
+    * WebDavBrowser
     * Verify file contents
     * Simulate random network failures and verify contents are valid with MD5 hash
 * Prompting the user to increase local storage space if files are too large
@@ -50,6 +50,8 @@ TODO:
 
 Work Log
 --------
+* 2014-05-03
+    * Fixed bug that deleted everything instead of just currently selected item :)
 * 2014-04-27
     * Added ability to list files with WebDAV
     * Tested various UI frameworks and templating engines
